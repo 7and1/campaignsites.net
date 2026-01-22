@@ -278,7 +278,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                   Key highlights
                 </h2>
                 <ul className="mt-4 space-y-3">
-                  {study.highlights.map((h, index) => (
+                  {study.highlights.map((h: { point?: string | null }, index: number) => (
                     <li key={index} className="flex items-start gap-3 rounded-2xl border border-white/70 bg-white/80 p-4 shadow-sm">
                       <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-primary-100 text-sm font-semibold text-primary-700">
                         {index + 1}
