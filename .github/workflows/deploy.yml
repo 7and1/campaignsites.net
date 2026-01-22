@@ -76,6 +76,12 @@ jobs:
           bucket_name = "campaignsites-cache"
           EOF
 
+      - name: Generate Cloudflare types
+        run: pnpm run generate:types:cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: Run database migrations
         run: pnpm run deploy:database
         env:
