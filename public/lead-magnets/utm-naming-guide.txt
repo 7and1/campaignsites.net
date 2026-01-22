@@ -1,0 +1,19 @@
+CampaignSites UTM Naming Guide
+
+Core rules
+- Use lowercase, hyphen-separated values.
+- Keep it consistent across every channel.
+- Never change utm_source within a campaign.
+
+Recommended structure
+utm_source: platform (facebook, google, newsletter)
+utm_medium: channel type (cpc, paid-social, email)
+utm_campaign: offer + month (spring-launch-jan)
+utm_term: keyword or audience segment
+utm_content: creative or placement (video-a, banner-b)
+
+Examples
+https://example.com/offer?utm_source=facebook&utm_medium=paid-social&utm_campaign=webinar-jan&utm_content=video-a
+https://example.com/offer?utm_source=google&utm_medium=cpc&utm_campaign=trial-feb&utm_term=free-trial
+
+Tip: Keep a shared spreadsheet of live campaign names so every teammate stays aligned.

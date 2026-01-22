@@ -1,0 +1,49 @@
+# Wrangler Configuration Template
+# Copy this file to wrangler.toml and fill in your values
+# NEVER commit wrangler.toml to git (it contains sensitive IDs)
+
+name = "campaignsites"
+compatibility_date = "2025-08-15"
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+main = ".open-next/worker.js"
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "D1"
+database_name = "campaign-db"
+database_id = "YOUR_D1_DATABASE_ID"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "campaign-media"
+
+[[r2_buckets]]
+binding = "NEXT_INC_CACHE_R2_BUCKET"
+bucket_name = "campaignsites-cache"
+
+[vars]
+PAYLOAD_SECRET = "YOUR_PAYLOAD_SECRET"
+IP_HASH_SALT = "YOUR_IP_HASH_SALT"
+
+[env.production]
+name = "campaignsites"
+
+[env.production.vars]
+PAYLOAD_SECRET = "YOUR_PAYLOAD_SECRET"
+IP_HASH_SALT = "YOUR_IP_HASH_SALT"
+
+[[env.production.d1_databases]]
+binding = "D1"
+database_name = "campaign-db"
+database_id = "YOUR_D1_DATABASE_ID"
+
+[[env.production.r2_buckets]]
+binding = "R2"
+bucket_name = "campaign-media"
+
+[[env.production.r2_buckets]]
+binding = "NEXT_INC_CACHE_R2_BUCKET"
+bucket_name = "campaignsites-cache"

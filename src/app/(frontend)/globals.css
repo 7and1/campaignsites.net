@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: 32 35% 98%;
+  --ink: 222 47% 11%;
+  --muted: 215 16% 46%;
+  --accent: 18 92% 55%;
+  --accent-strong: 18 92% 45%;
+  --accent-soft: 18 92% 96%;
+  --teal: 186 52% 36%;
+  --shadow: 222 47% 11%;
+  --radius: 18px;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: hsl(var(--ink));
+  background:
+    radial-gradient(1100px 500px at 5% -10%, hsl(18 92% 95% / 0.9), transparent 60%),
+    radial-gradient(900px 500px at 95% 0%, hsl(186 52% 90% / 0.8), transparent 55%),
+    hsl(var(--paper));
+}
+
+::selection {
+  background: hsl(var(--accent) / 0.2);
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply rounded-2xl border border-white/60 bg-white/70 shadow-lg shadow-black/5 backdrop-blur;
+  }
+
+  .section-title {
+    @apply text-3xl font-semibold text-ink-900 sm:text-4xl;
+  }
+
+  .section-kicker {
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-primary-600;
+  }
+
+  .soft-divider {
+    @apply border-t border-white/70;
+  }
+}

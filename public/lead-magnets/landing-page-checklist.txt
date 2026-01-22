@@ -1,0 +1,19 @@
+CampaignSites Landing Page Launch Checklist
+
+1. Confirm single goal (one CTA above the fold).
+2. Lead with a benefit-driven headline (≤ 12 words).
+3. Add proof within 3 seconds: logos, testimonials, or quantified results.
+4. Use one hero image or product demo video (no galleries).
+5. Mirror ad copy in the subheadline for message match.
+6. Highlight 3 key benefits with scannable bullets.
+7. Include one primary CTA style; remove secondary CTAs from hero.
+8. Add urgency or scarcity (deadline, limited seats, capped bonus).
+9. Reduce form fields to the minimum needed (name + email).
+10. Place a trust signal near every CTA.
+11. Validate mobile layout: headline, CTA, and proof visible above the fold.
+12. Optimize page weight under 2 MB (compress images).
+13. Track events: CTA click, form submit, scroll depth.
+14. Add UTM parameters for every paid channel.
+15. Review for clarity: can a new visitor explain the offer in 5 seconds?
+
+Need help? Visit campaignsites.net for tools and case studies.
