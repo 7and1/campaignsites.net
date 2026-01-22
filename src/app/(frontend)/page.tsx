@@ -250,17 +250,17 @@ export default async function HomePage() {
             </p>
 
             <p className="text-ink-600 leading-relaxed">
-              Fourth, they match the message to the traffic source. When someone clicks an ad about "free shipping," the landing page better mention free shipping above the fold. Message match alone can improve conversion rates by 50% or more. Fifth, they remove friction. Every form field you add reduces conversions by roughly 4%. Every extra click between landing and conversion costs you customers.
+              Fourth, they match the message to the traffic source. When someone clicks an ad about &ldquo;free shipping,&rdquo; the landing page better mention free shipping above the fold. Message match alone can improve conversion rates by 50% or more. Fifth, they remove friction. Every form field you add reduces conversions by roughly 4%. Every extra click between landing and conversion costs you customers.
             </p>
 
             <h3 className="text-xl font-semibold text-ink-900 mt-8">The Psychology Behind Urgency and Scarcity</h3>
 
             <p className="text-ink-600 leading-relaxed">
-              Countdown timers work because of loss aversion. Humans feel the pain of losing something twice as strongly as the pleasure of gaining something equivalent. When visitors see a timer counting down, their brain shifts from "should I buy this?" to "what will I miss if I don't?" That psychological shift is worth real money.
+              Countdown timers work because of loss aversion. Humans feel the pain of losing something twice as strongly as the pleasure of gaining something equivalent. When visitors see a timer counting down, their brain shifts from &ldquo;should I buy this?&rdquo; to &ldquo;what will I miss if I don&apos;t?&rdquo; That psychological shift is worth real money.
             </p>
 
             <p className="text-ink-600 leading-relaxed">
-              But urgency only works when it is real. Fake scarcity destroys trust. If your "limited time offer" resets every time someone visits, you are training customers to ignore your deadlines. The best campaigns use genuine constraints: actual inventory limits, real event dates, or legitimate pricing windows. Authenticity converts better than manipulation.
+              But urgency only works when it is real. Fake scarcity destroys trust. If your &ldquo;limited time offer&rdquo; resets every time someone visits, you are training customers to ignore your deadlines. The best campaigns use genuine constraints: actual inventory limits, real event dates, or legitimate pricing windows. Authenticity converts better than manipulation.
             </p>
 
             <h3 className="text-xl font-semibold text-ink-900 mt-8">UTM Tracking: The Foundation of Campaign Intelligence</h3>
@@ -270,13 +270,13 @@ export default async function HomePage() {
             </p>
 
             <p className="text-ink-600 leading-relaxed">
-              The key is consistency. When every team member uses different naming conventions, your analytics become a mess. "facebook" and "Facebook" and "fb" all look like different sources. Our UTM Builder enforces consistent naming across your entire organization, so your data stays clean and actionable.
+              The key is consistency. When every team member uses different naming conventions, your analytics become a mess. &ldquo;facebook&rdquo; and &ldquo;Facebook&rdquo; and &ldquo;fb&rdquo; all look like different sources. Our UTM Builder enforces consistent naming across your entire organization, so your data stays clean and actionable.
             </p>
 
             <h3 className="text-xl font-semibold text-ink-900 mt-8">Budget Planning: From Guesswork to Forecasting</h3>
 
             <p className="text-ink-600 leading-relaxed">
-              Most marketing budgets are based on gut feelings and last year's numbers. That approach leaves money on the table. When you understand your cost per click, conversion rate, and customer lifetime value, you can model exactly how much to spend and what return to expect. Our Budget Calculator uses industry benchmarks to help you forecast results before you spend a dollar.
+              Most marketing budgets are based on gut feelings and last year&apos;s numbers. That approach leaves money on the table. When you understand your cost per click, conversion rate, and customer lifetime value, you can model exactly how much to spend and what return to expect. Our Budget Calculator uses industry benchmarks to help you forecast results before you spend a dollar.
             </p>
 
             <p className="text-ink-600 leading-relaxed">
@@ -286,11 +286,11 @@ export default async function HomePage() {
             <h3 className="text-xl font-semibold text-ink-900 mt-8">Copy That Converts: Headlines, CTAs, and Value Propositions</h3>
 
             <p className="text-ink-600 leading-relaxed">
-              Your headline has about 8 seconds to convince someone to keep reading. That is not much time. The best headlines do three things: they speak directly to a specific audience, they promise a clear benefit, and they create curiosity. "How to Double Your Conversion Rate in 30 Days" works better than "Marketing Tips" because it is specific, beneficial, and intriguing.
+              Your headline has about 8 seconds to convince someone to keep reading. That is not much time. The best headlines do three things: they speak directly to a specific audience, they promise a clear benefit, and they create curiosity. &ldquo;How to Double Your Conversion Rate in 30 Days&rdquo; works better than &ldquo;Marketing Tips&rdquo; because it is specific, beneficial, and intriguing.
             </p>
 
             <p className="text-ink-600 leading-relaxed">
-              Call-to-action buttons matter more than most people realize. Changing a CTA from "Submit" to "Get My Free Guide" can increase clicks by 90% or more. The best CTAs are specific, action-oriented, and benefit-focused. They tell visitors exactly what they will get and what they need to do to get it.
+              Call-to-action buttons matter more than most people realize. Changing a CTA from &ldquo;Submit&rdquo; to &ldquo;Get My Free Guide&rdquo; can increase clicks by 90% or more. The best CTAs are specific, action-oriented, and benefit-focused. They tell visitors exactly what they will get and what they need to do to get it.
             </p>
 
             <h3 className="text-xl font-semibold text-ink-900 mt-8">Testing: The Only Way to Know What Works</h3>
