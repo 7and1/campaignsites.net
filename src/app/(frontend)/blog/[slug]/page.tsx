@@ -270,7 +270,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-500">Tools mentioned</p>
                 <ul className="mt-4 space-y-3 text-sm text-ink-600">
                   {post.relatedTools
-                    .filter((t): t is Tool => typeof t === 'object')
+                    .filter((t: Tool | string): t is Tool => typeof t === 'object')
                     .map((tool) => (
                     <li key={tool.id || tool.slug} className="flex items-center justify-between gap-3">
                       <span>{tool.name}</span>
