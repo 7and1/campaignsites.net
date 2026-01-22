@@ -338,7 +338,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                 <div className="mt-4 space-y-3">
                   {study.affiliateTools
                     .filter((t: Tool | string): t is Tool => typeof t === 'object')
-                    .map((tool) => (
+                    .map((tool: Tool) => (
                     <div key={tool.id || tool.slug} className="rounded-xl border border-mist-200 bg-white p-4">
                       <p className="font-semibold text-ink-900">{tool.name}</p>
                       {tool.category && <p className="text-xs text-ink-500">{tool.category}</p>}

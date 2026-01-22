@@ -271,7 +271,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <ul className="mt-4 space-y-3 text-sm text-ink-600">
                   {post.relatedTools
                     .filter((t: Tool | string): t is Tool => typeof t === 'object')
-                    .map((tool) => (
+                    .map((tool: Tool) => (
                     <li key={tool.id || tool.slug} className="flex items-center justify-between gap-3">
                       <span>{tool.name}</span>
                       {tool.category && <span className="text-xs text-ink-400">{tool.category}</span>}
