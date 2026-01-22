@@ -252,7 +252,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             )}
 
             <div className="mt-10">
-              <ToolComparisonTable tools={(post.relatedTools?.filter((t): t is Tool => typeof t === 'object')) || []} title="Recommended tools" context="blog-post" />
+              <ToolComparisonTable tools={(post.relatedTools?.filter((t: Tool | string): t is Tool => typeof t === 'object')) || []} title="Recommended tools" context="blog-post" />
             </div>
 
             <div className="mt-10">
