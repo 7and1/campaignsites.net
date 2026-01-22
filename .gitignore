@@ -41,5 +41,5 @@ yarn-error.log*
 *.tsbuildinfo
 cloudflare-env.d.ts
 
-# Payload
-src/payload-types.ts
+# Payload - Auto-generated but required for build
+# src/payload-types.ts  # Keep this in repo for CI builds
