@@ -79,8 +79,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       type: 'article',
       url: `https://campaignsites.net/blog/${post.slug}`,
       images: [{ url: ogImage }],
-      publishedTime: post.publishedDate,
-      modifiedTime: post.updatedAt || post.publishedDate,
+      publishedTime: post.publishedDate || undefined,
+      modifiedTime: post.updatedAt || post.publishedDate || undefined,
       authors: ['CampaignSites.net Editorial Team'],
     },
     twitter: {
