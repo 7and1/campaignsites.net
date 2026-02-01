@@ -76,16 +76,24 @@ export async function validateCsrfToken(requestToken: string | null): Promise<vo
 
   try {
     // Use timing-safe comparison to prevent timing attacks
-    const isValid = crypto.timingSafeEqual(
-      Buffer.from(requestToken, 'hex'),
-      Buffer.from(cookieToken, 'hex')
-    )
+    // Web Crypto API doesn't have timingSafeEqual, so we implement it
+    const encoder = new TextEncoder()
+    const a = encoder.encode(requestToken)
+    const b = encoder.encode(cookieToken)
+
+    // Constant-time comparison
+    let result = 0
+    for (let i = 0; i < a.length; i++) {
+      result |= a[i] ^ b[i]
+    }
+
+    const isValid = result === 0
 
     if (!isValid) {
       throw new Error('Invalid CSRF token')
     }
   } catch (error) {
-    // Handle any errors from timingSafeEqual (e.g., buffer length mismatch)
+    // Handle any errors from comparison
     throw new Error('Invalid CSRF token')
   }
 }
