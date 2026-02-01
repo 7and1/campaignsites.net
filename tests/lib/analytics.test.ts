@@ -4,7 +4,7 @@ import { hashIp } from '@/lib/analytics'
 // Mock crypto
 vi.mock('crypto', () => ({
   default: {
-    createHash: vi.fn(() => ({
+    createHmac: vi.fn(() => ({
       update: vi.fn(() => ({
         digest: vi.fn(() => 'a1b2c3d4e5f6hashedvalue1234567890abcdef'),
       })),
@@ -15,6 +15,7 @@ vi.mock('crypto', () => ({
 describe('hashIp', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    process.env.PAYLOAD_SECRET = 'test-secret-for-hmac-hashing'
   })
 
   it('hashes an IPv4 address', () => {

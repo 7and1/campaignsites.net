@@ -24,9 +24,9 @@ export const PostCard = memo(function PostCard({ post }: PostCardProps) {
         <div className="relative aspect-[16/9] overflow-hidden bg-mist-100">
           <Image
             src={imageUrl}
-            alt={post.title}
+            alt={`Featured image for ${post.title} - Campaign landing page guide`}
             fill
-            loading="lazy"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition duration-500 group-hover:scale-[1.03]"
           />
         </div>

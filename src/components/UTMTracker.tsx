@@ -1,6 +1,7 @@
 'use client'
 
 import { memo, useEffect } from 'react'
+import { withCsrfToken } from '@/lib/csrf-client'
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const
 
@@ -33,22 +34,22 @@ export const UTMTracker = memo(function UTMTracker() {
     if ('requestIdleCallback' in window) {
       window.requestIdleCallback(
         () => {
-          fetch('/api/track', {
+          fetch('/api/track', withCsrfToken({
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(trackData),
-          }).catch(() => {
+          })).catch(() => {
             // Ignore tracking errors
           })
         },
         { timeout: 2000 }
       )
     } else {
-      fetch('/api/track', {
+      fetch('/api/track', withCsrfToken({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(trackData),
-      }).catch(() => {
+      })).catch(() => {
         // Ignore tracking errors
       })
     }

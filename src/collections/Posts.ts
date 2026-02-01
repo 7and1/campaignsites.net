@@ -18,9 +18,9 @@ export const Posts: CollectionConfig = {
         {
           label: 'Content',
           fields: [
+            { name: 'publishedDate', type: 'date', label: 'Published Date', index: true },
             { name: 'excerpt', type: 'textarea', label: 'Excerpt' },
             { name: 'content', type: 'richText' },
-            { name: 'publishedDate', type: 'date', label: 'Published Date' },
             {
               name: 'category',
               type: 'select',

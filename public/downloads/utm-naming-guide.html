@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTM Naming Convention Guide - CampaignSites.net</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2563eb;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+        .intro {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #2563eb;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .rule-box {
+            background: #fff7ed;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .rule-title {
+            font-weight: 700;
+            color: #ea580c;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .rule-content {
+            color: #92400e;
+            font-size: 14px;
+        }
+        .parameter-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .param-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2563eb;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 8px;
+        }
+        .param-purpose {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+        .param-description {
+            color: #666;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        .param-examples {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #2563eb;
+        }
+        .example-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .example-item {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th {
+            background: #2563eb;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+        }
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 15px 0;
+            word-wrap: break-word;
+        }
+        .tip-box {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .tip-title {
+            font-weight: 600;
+            color: #059669;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .tip-content {
+            font-size: 14px;
+            color: #047857;
+        }
+        .warning-box {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning-title {
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 8px;
+        }
+        .warning-content {
+            font-size: 14px;
+            color: #991b1b;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e7eb;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .footer-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        li {
+            margin-bottom: 8px;
+            color: #374151;
+        }
+        @media print {
+            body {
+                padding: 0;
+            }
+            .parameter-card, .rule-box {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">CampaignSites.net</div>
+        <h1>UTM Naming Convention Guide</h1>
+        <p class="subtitle">Standardized Framework for Campaign Tracking Across Teams</p>
+    </div>
+
+    <div class="intro">
+        <strong>Why UTM conventions matter:</strong> Consistent UTM naming is the foundation of accurate campaign analytics. Without standards, your Google Analytics data becomes unusable within weeks. This guide provides a battle-tested framework used by marketing teams managing 100+ campaigns simultaneously.
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Core Rules (Non-Negotiable)</h2>
+
+        <div class="rule-box">
+            <div class="rule-title">Rule #1: Always Use Lowercase</div>
+            <div class="rule-content">
+                Google Analytics treats "Facebook" and "facebook" as different sources. Use lowercase exclusively to avoid data fragmentation.
+                <br><br>
+                ✅ utm_source=facebook<br>
+                ❌ utm_source=Facebook
+            </div>
+        </div>
+
+        <div class="rule-box">
+            <div class="rule-title">Rule #2: Use Hyphens, Not Spaces or Underscores</div>
+            <div class="rule-content">
+                Spaces become %20 in URLs (ugly and hard to read). Underscores can be confused with spaces. Hyphens are clean and URL-safe.
+                <br><br>
+                ✅ utm_campaign=spring-sale-2024<br>
+                ❌ utm_campaign=spring_sale_2024<br>
+                ❌ utm_campaign=Spring%20Sale%202024
+            </div>
+        </div>
+
+        <div class="rule-box">
+            <div class="rule-title">Rule #3: Never Change Source Mid-Campaign</div>
+            <div class="rule-content">
+                If you start with utm_source=facebook, don't switch to utm_source=fb or utm_source=meta halfway through. Pick one and stick with it forever.
+            </div>
+        </div>
+
+        <div class="rule-box">
+            <div class="rule-title">Rule #4: Document Everything</div>
+            <div class="rule-content">
+                Keep a shared spreadsheet of all active campaigns with their UTM parameters. This prevents duplicates and ensures team alignment.
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">The 5 UTM Parameters Explained</h2>
+
+        <div class="parameter-card">
+            <div class="param-name">utm_source</div>
+            <div class="param-purpose">Purpose: Identifies where traffic originates</div>
+            <div class="param-description">
+                The specific platform or referrer sending traffic. Think of this as the "publisher" of your ad or link.
+            </div>
+            <div class="param-examples">
+                <div class="example-label">Standard Sources:</div>
+                <div class="example-item">• facebook (Facebook/Instagram ads)</div>
+                <div class="example-item">• google (Google Ads)</div>
+                <div class="example-item">• linkedin (LinkedIn ads)</div>
+                <div class="example-item">• newsletter (email campaigns)</div>
+                <div class="example-item">• twitter (Twitter/X ads)</div>
+                <div class="example-item">• partner-acme (partner/affiliate traffic)</div>
+            </div>
+        </div>
+
+        <div class="parameter-card">
+            <div class="param-name">utm_medium</div>
+            <div class="param-purpose">Purpose: Categorizes the marketing channel type</div>
+            <div class="param-description">
+                The broad category of marketing activity. Use consistent mediums across all sources for easier reporting.
+            </div>
+            <div class="param-examples">
+                <div class="example-label">Standard Mediums:</div>
+                <div class="example-item">• cpc (paid search - cost per click)</div>
+                <div class="example-item">• paid-social (paid social media ads)</div>
+                <div class="example-item">• email (email marketing)</div>
+                <div class="example-item">• organic-social (unpaid social posts)</div>
+                <div class="example-item">• display (banner/display ads)</div>
+                <div class="example-item">• affiliate (affiliate/partner links)</div>
+                <div class="example-item">• referral (referral traffic)</div>
+            </div>
+        </div>
+
+        <div class="parameter-card">
+            <div class="param-name">utm_campaign</div>
+            <div class="param-purpose">Purpose: Names the specific campaign or promotion</div>
+            <div class="param-description">
+                The overarching campaign or offer. Include time period for seasonal campaigns. Keep it descriptive but concise.
+            </div>
+            <div class="param-examples">
+                <div class="example-label">Naming Format: [offer]-[month/quarter]</div>
+                <div class="example-item">• spring-sale-q2</div>
+                <div class="example-item">• webinar-jan-2024</div>
+                <div class="example-item">• free-trial-promo</div>
+                <div class="example-item">• product-launch-v2</div>
+                <div class="example-item">• black-friday-2024</div>
+            </div>
+        </div>
+
+        <div class="parameter-card">
+            <div class="param-name">utm_term</div>
+            <div class="param-purpose">Purpose: Tracks keywords or audience segments (optional)</div>
+            <div class="param-description">
+                Originally for paid search keywords, but also useful for audience targeting in social ads.
+            </div>
+            <div class="param-examples">
+                <div class="example-label">Use Cases:</div>
+                <div class="example-item">• landing-page-software (search keyword)</div>
+                <div class="example-item">• saas-founders (Facebook audience)</div>
+                <div class="example-item">• retargeting-30d (retargeting segment)</div>
+                <div class="example-item">• lookalike-tier1 (lookalike audience)</div>
+            </div>
+        </div>
+
+        <div class="parameter-card">
+            <div class="param-name">utm_content</div>
+            <div class="param-purpose">Purpose: Differentiates ad creatives or placements (optional)</div>
+            <div class="param-description">
+                Use for A/B testing different ad variations, link placements, or creative formats.
+            </div>
+            <div class="param-examples">
+                <div class="example-label">Use Cases:</div>
+                <div class="example-item">• video-a (video creative variant A)</div>
+                <div class="example-item">• banner-hero (hero banner placement)</div>
+                <div class="example-item">• cta-blue (blue CTA button test)</div>
+                <div class="example-item">• headline-benefit (benefit-focused headline)</div>
+                <div class="example-item">• sidebar-widget (sidebar placement)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Real-World Examples by Channel</h2>
+
+        <h3 style="margin: 20px 0 10px 0; font-size: 16px; font-weight: 600;">Facebook/Instagram Ads</h3>
+        <div class="code-block">
+https://yoursite.com/landing?utm_source=facebook&utm_medium=paid-social&utm_campaign=spring-sale-q2&utm_content=video-a
+        </div>
+
+        <h3 style="margin: 20px 0 10px 0; font-size: 16px; font-weight: 600;">Google Search Ads</h3>
+        <div class="code-block">
+https://yoursite.com/landing?utm_source=google&utm_medium=cpc&utm_campaign=free-trial-promo&utm_term=landing-page-builder
+        </div>
+
+        <h3 style="margin: 20px 0 10px 0; font-size: 16px; font-weight: 600;">Email Newsletter</h3>
+        <div class="code-block">
+https://yoursite.com/blog/post?utm_source=newsletter&utm_medium=email&utm_campaign=weekly-digest-jan&utm_content=featured-article
+        </div>
+
+        <h3 style="margin: 20px 0 10px 0; font-size: 16px; font-weight: 600;">LinkedIn Sponsored Content</h3>
+        <div class="code-block">
+https://yoursite.com/demo?utm_source=linkedin&utm_medium=paid-social&utm_campaign=webinar-feb&utm_term=marketing-directors
+        </div>
+
+        <h3 style="margin: 20px 0 10px 0; font-size: 16px; font-weight: 600;">Partner/Affiliate Link</h3>
+        <div class="code-block">
+https://yoursite.com/signup?utm_source=partner-techcrunch&utm_medium=affiliate&utm_campaign=q1-partnership
+        </div>
+
+        <h3 style="margin: 20px 0 10px 0; font-size: 16px; font-weight: 600;">Twitter/X Organic Post</h3>
+        <div class="code-block">
+https://yoursite.com/guide?utm_source=twitter&utm_medium=organic-social&utm_campaign=content-promotion&utm_content=thread-jan15
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Quick Reference Table</h2>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Channel</th>
+                        <th>utm_source</th>
+                        <th>utm_medium</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Google Ads</td>
+                        <td>google</td>
+                        <td>cpc</td>
+                        <td>Use utm_term for keywords</td>
+                    </tr>
+                    <tr>
+                        <td>Facebook Ads</td>
+                        <td>facebook</td>
+                        <td>paid-social</td>
+                        <td>Include Instagram in same source</td>
+                    </tr>
+                    <tr>
+                        <td>LinkedIn Ads</td>
+                        <td>linkedin</td>
+                        <td>paid-social</td>
+                        <td>Use utm_term for job titles</td>
+                    </tr>
+                    <tr>
+                        <td>Email Marketing</td>
+                        <td>newsletter</td>
+                        <td>email</td>
+                        <td>Or use ESP name (mailchimp)</td>
+                    </tr>
+                    <tr>
+                        <td>Twitter/X Ads</td>
+                        <td>twitter</td>
+                        <td>paid-social</td>
+                        <td>Consistent with other social</td>
+                    </tr>
+                    <tr>
+                        <td>Display Ads</td>
+                        <td>google-display</td>
+                        <td>display</td>
+                        <td>Or network name (gdn, taboola)</td>
+                    </tr>
+                    <tr>
+                        <td>Organic Social</td>
+                        <td>facebook/twitter/linkedin</td>
+                        <td>organic-social</td>
+                        <td>Distinguish from paid</td>
+                    </tr>
+                    <tr>
+                        <td>Affiliate/Partner</td>
+                        <td>partner-[name]</td>
+                        <td>affiliate</td>
+                        <td>Include partner name in source</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Common Mistakes to Avoid</h2>
+
+        <div class="warning-box">
+            <div class="warning-title">❌ Mistake #1: Inconsistent Capitalization</div>
+            <div class="warning-content">
+                Using "Facebook," "facebook," and "fb" creates three separate sources in analytics. Pick one (lowercase) and never deviate.
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <div class="warning-title">❌ Mistake #2: Using UTMs on Internal Links</div>
+            <div class="warning-content">
+                Never add UTM parameters to links within your own site. This resets the session and attributes conversions incorrectly. UTMs are for external traffic only.
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <div class="warning-title">❌ Mistake #3: Overly Generic Campaign Names</div>
+            <div class="warning-content">
+                "campaign1" or "test" tells you nothing in 3 months. Use descriptive names: "spring-sale-q2" or "webinar-jan-2024."
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <div class="warning-title">❌ Mistake #4: Not Testing Links Before Launch</div>
+            <div class="warning-content">
+                Always click your UTM links and verify they appear correctly in Google Analytics Real-Time reports before spending ad budget.
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Pro Tips for Advanced Users</h2>
+
+        <div class="tip-box">
+            <div class="tip-title">💡 Tip #1: Use a UTM Builder Tool</div>
+            <div class="tip-content">
+                Don't manually type UTM parameters. Use a builder tool (like campaignsites.net/tools/utm-builder) to ensure consistency and avoid typos.
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <div class="tip-title">💡 Tip #2: Create a Naming Convention Doc</div>
+            <div class="tip-content">
+                Document your team's standards in a shared Google Doc. Include approved sources, mediums, and naming patterns. Onboard new team members with this doc.
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <div class="tip-title">💡 Tip #3: Use Spreadsheet Tracking</div>
+            <div class="tip-content">
+                Maintain a master spreadsheet with columns: Campaign Name, Start Date, End Date, Full UTM Link, Budget, Owner. This prevents duplicate campaign names and provides historical reference.
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <div class="tip-title">💡 Tip #4: Audit Quarterly</div>
+            <div class="tip-content">
+                Every quarter, review your GA4 source/medium report. Look for inconsistencies (e.g., "facebook" vs "fb"). Clean up naming going forward.
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <div class="tip-title">💡 Tip #5: Shorten Links for Social</div>
+            <div class="tip-content">
+                UTM links are long and ugly. Use a link shortener (Bitly, Rebrandly) for social posts, but keep the full UTM link in your tracking spreadsheet.
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">UTM Parameter Checklist</h2>
+
+        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb;">
+            <p style="margin-bottom: 15px; font-weight: 600;">Before launching any campaign, verify:</p>
+            <ul style="list-style: none; margin-left: 0;">
+                <li style="margin-bottom: 10px;">☐ All parameters are lowercase</li>
+                <li style="margin-bottom: 10px;">☐ Spaces replaced with hyphens</li>
+                <li style="margin-bottom: 10px;">☐ Source and medium match your standards doc</li>
+                <li style="margin-bottom: 10px;">☐ Campaign name is descriptive and unique</li>
+                <li style="margin-bottom: 10px;">☐ Link tested in GA4 Real-Time report</li>
+                <li style="margin-bottom: 10px;">☐ Full link saved in tracking spreadsheet</li>
+                <li style="margin-bottom: 10px;">☐ Team members notified of new campaign</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Need a UTM builder tool?</strong></p>
+        <p>Visit <a href="https://campaignsites.net/tools/utm-builder" class="footer-link">campaignsites.net/tools/utm-builder</a> for a free, easy-to-use UTM generator with presets and validation.</p>
+        <p style="margin-top: 10px; font-size: 12px;">© 2024 CampaignSites.net • Free resource for marketers</p>
+    </div>
+</body>
+</html>

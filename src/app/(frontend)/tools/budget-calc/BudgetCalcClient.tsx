@@ -2,11 +2,38 @@
 
 import { useMemo, useState, useCallback, useEffect } from 'react'
 import { Calculator, DollarSign, TrendingUp, Users, Loader2 } from 'lucide-react'
-import { AffiliateCTA, ExitIntentModal, ToolUsageTracker } from '@/components'
+import { AffiliateCTA, ExitIntentModal, ToolUsageTracker, FAQSection, ToolExportMenu, UndoRedoControls } from '@/components'
 import { calculateBudgetMetrics } from '@/lib/budget'
 import { Input, Select, InlineError, Alert } from '@/components/ui'
 import { AFFILIATE_URLS, INDUSTRY_BENCHMARKS, UI_CONSTANTS } from '@/lib/constants'
 import type { Benchmark } from '@/lib/types'
+import { useUndoRedo } from '@/lib/hooks/useUndoRedo'
+import { useKeyboardShortcuts } from '@/lib/hooks/useKeyboardShortcuts'
+import { useToolHistoryStore } from '@/lib/stores/toolHistoryStore'
+import { toast } from 'sonner'
+
+const budgetFAQItems = [
+  {
+    question: 'How accurate is the budget calculator?',
+    answer: 'Our calculator uses real industry benchmark data from thousands of campaigns. While actual results vary based on your specific offer, audience, and creative quality, the estimates provide a solid baseline for planning. We recommend using the benchmarks as a starting point, then adjusting based on your historical performance data.',
+  },
+  {
+    question: 'What is a good cost per conversion for my industry?',
+    answer: 'Cost per conversion varies significantly by industry. E-commerce typically sees $20-50 CPA, SaaS ranges from $50-200, and B2B services can be $100-500+. The key is comparing your CPA to customer lifetime value (LTV). A $100 CPA is excellent if your average customer spends $1,000, but problematic if they only spend $50.',
+  },
+  {
+    question: 'How do I improve my campaign conversion rate?',
+    answer: 'To improve conversion rates: 1) Ensure message match between your ad and landing page, 2) Simplify your forms—every field reduces conversions by ~4%, 3) Add social proof like testimonials and trust badges, 4) Use clear, benefit-focused CTAs, 5) Improve page load speed—53% of mobile users abandon pages that take over 3 seconds to load.',
+  },
+  {
+    question: 'Should I use industry benchmarks or my own data?',
+    answer: 'Start with industry benchmarks for initial planning, but always prioritize your own historical data once you have it. Click the "Custom overrides" section in our calculator to input your actual CPC and conversion rates for more accurate forecasting. Your own data will always be more predictive than generic benchmarks.',
+  },
+  {
+    question: 'How much should I spend on my first campaign?',
+    answer: 'For testing a new campaign, we recommend a minimum of $500-1,000 to gather statistically significant data. This typically generates enough clicks (200-500) to identify clear winners in A/B tests. Start small, validate your assumptions, then scale budget on campaigns showing positive ROI.',
+  },
+]
 
 const industryOptions = Object.keys(INDUSTRY_BENCHMARKS).map((ind) => ({ value: ind, label: ind }))
 
@@ -17,10 +44,23 @@ interface FormErrors {
 }
 
 export default function BudgetCalcClient() {
-  const [industry, setIndustry] = useState('E-commerce')
-  const [budget, setBudget] = useState(1000)
-  const [customCPC, setCustomCPC] = useState<number | null>(null)
-  const [customConvRate, setCustomConvRate] = useState<number | null>(null)
+  const addToHistory = useToolHistoryStore((state) => state.addToHistory)
+
+  const {
+    state: formState,
+    set: setFormState,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+  } = useUndoRedo({
+    industry: 'E-commerce',
+    budget: 1000,
+    customCPC: null as number | null,
+    customConvRate: null as number | null,
+  })
+
+  const { industry, budget, customCPC, customConvRate } = formState
   const [errors, setErrors] = useState<FormErrors>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [isCalculating, setIsCalculating] = useState(false)
@@ -71,42 +111,83 @@ export default function BudgetCalcClient() {
 
   const handleBudgetChange = useCallback((value: string) => {
     const numValue = Number(value)
-    setBudget(numValue)
+    setFormState({ ...formState, budget: numValue })
     setTouched((prev) => ({ ...prev, budget: true }))
     setErrors((prev) => ({ ...prev, budget: validateBudget(numValue) }))
-  }, [validateBudget])
+  }, [validateBudget, formState, setFormState])
 
   const handleCustomCPCChange = useCallback((value: string) => {
     const numValue = value ? Number(value) : null
-    setCustomCPC(numValue)
+    setFormState({ ...formState, customCPC: numValue })
     setTouched((prev) => ({ ...prev, customCPC: true }))
     setErrors((prev) => ({ ...prev, customCPC: validateCustomCPC(numValue) }))
-  }, [validateCustomCPC])
+  }, [validateCustomCPC, formState, setFormState])
 
   const handleCustomConvRateChange = useCallback((value: string) => {
     const numValue = value ? Number(value) : null
-    setCustomConvRate(numValue)
+    setFormState({ ...formState, customConvRate: numValue })
     setTouched((prev) => ({ ...prev, customConvRate: true }))
     setErrors((prev) => ({ ...prev, customConvRate: validateCustomConvRate(numValue) }))
-  }, [validateCustomConvRate])
+  }, [validateCustomConvRate, formState, setFormState])
 
   const handleIndustryChange = useCallback((value: string) => {
-    setIndustry(value)
-    setCustomCPC(null)
-    setCustomConvRate(null)
+    setFormState({ ...formState, industry: value, customCPC: null, customConvRate: null })
     setTouched((prev) => ({ ...prev, customCPC: false, customConvRate: false }))
     setErrors((prev) => ({ ...prev, customCPC: undefined, customConvRate: undefined }))
-  }, [])
+  }, [formState, setFormState])
 
   const resetOverrides = useCallback(() => {
-    setCustomCPC(null)
-    setCustomConvRate(null)
+    setFormState({ ...formState, customCPC: null, customConvRate: null })
     setErrors((prev) => ({ ...prev, customCPC: undefined, customConvRate: undefined }))
-  }, [])
+    toast.success('Reset to benchmark values')
+  }, [formState, setFormState])
 
   const formatNumber = (num: number) => {
     return num.toLocaleString('en-US', { maximumFractionDigits: 0 })
   }
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    {
+      key: 'z',
+      ctrl: true,
+      callback: () => {
+        if (canUndo) {
+          undo()
+          toast.success('Undo')
+        }
+      },
+      description: 'Undo',
+    },
+    {
+      key: 'y',
+      ctrl: true,
+      callback: () => {
+        if (canRedo) {
+          redo()
+          toast.success('Redo')
+        }
+      },
+      description: 'Redo',
+    },
+  ])
+
+  // Save to history when metrics change
+  useEffect(() => {
+    if (budget >= 100 && !Object.values(errors).some(Boolean)) {
+      addToHistory({
+        toolId: 'budget-calc',
+        toolName: 'Budget Calculator',
+        data: {
+          industry,
+          budget,
+          customCPC,
+          customConvRate,
+          metrics,
+        },
+      })
+    }
+  }, [budget, industry, customCPC, customConvRate, metrics, errors, addToHistory])
 
   return (
     <main className="min-h-screen">
@@ -121,6 +202,38 @@ export default function BudgetCalcClient() {
               Estimate clicks, conversions, and CPA using live industry benchmarks. Customize CPC and
               conversion rates as needed.
             </p>
+
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <UndoRedoControls
+                canUndo={canUndo}
+                canRedo={canRedo}
+                onUndo={undo}
+                onRedo={redo}
+              />
+              <ToolExportMenu
+                toolName="Budget Calculator"
+                exportOptions={{
+                  csv: {
+                    data: [
+                      {
+                        Industry: industry,
+                        Budget: `$${budget}`,
+                        'Estimated Clicks': metrics.clicks,
+                        'Estimated Conversions': metrics.conversions,
+                        'Cost Per Conversion': `$${metrics.costPerConversion.toFixed(2)}`,
+                        'Estimated Impressions': metrics.impressions,
+                        CPC: `$${effectiveBenchmark.cpc.toFixed(2)}`,
+                        'Conversion Rate': `${effectiveBenchmark.convRate}%`,
+                      },
+                    ],
+                    filename: `budget-calc-${Date.now()}.csv`,
+                  },
+                  clipboard: {
+                    text: `Budget Calculator Results\n\nIndustry: ${industry}\nBudget: $${budget}\nEstimated Clicks: ${formatNumber(metrics.clicks)}\nEstimated Conversions: ${formatNumber(metrics.conversions)}\nCost Per Conversion: $${metrics.costPerConversion.toFixed(2)}\nEstimated Impressions: ${formatNumber(metrics.impressions)}`,
+                  },
+                }}
+              />
+            </div>
 
             <div className="mt-8 grid gap-6 lg:gap-8 lg:grid-cols-2">
               <div className="space-y-4 sm:space-y-6 rounded-2xl border border-white/70 bg-white/80 p-4 sm:p-6 shadow-sm">
@@ -290,6 +403,13 @@ export default function BudgetCalcClient() {
           </div>
         </div>
       </section>
+
+      <FAQSection
+        title="Campaign Budget FAQ"
+        description="Common questions about planning and forecasting your campaign budgets."
+        items={budgetFAQItems}
+        pageUrl="https://campaignsites.net/tools/budget-calc"
+      />
 
       <ExitIntentModal
         title="Stretch your ad budget"

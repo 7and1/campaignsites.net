@@ -1,6 +1,7 @@
 'use client'
 
 import { memo, MouseEvent, ReactNode } from 'react'
+import { withCsrfToken } from '@/lib/csrf-client'
 
 interface AffiliateCTAProps {
   href?: string
@@ -15,7 +16,7 @@ export const AffiliateCTA = memo(function AffiliateCTA({ href, toolSlug, context
     const target = event.currentTarget.href
     if (!target || target === window.location.href) return
 
-    fetch('/api/track', {
+    fetch('/api/track', withCsrfToken({
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -24,7 +25,7 @@ export const AffiliateCTA = memo(function AffiliateCTA({ href, toolSlug, context
         context,
         url: target,
       }),
-    }).catch(() => {
+    })).catch(() => {
       // ignore tracking errors
     })
   }

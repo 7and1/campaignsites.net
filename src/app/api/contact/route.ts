@@ -4,8 +4,9 @@ import { contactSchema } from '@/lib/zod-schemas'
 import { checkRateLimit, getRateLimitIdentifier, ensureRateLimitTable } from '@/lib/rate-limit'
 import { logError } from '@/lib/errors'
 import { escapeHtml } from '@/lib/sanitization'
+import { withMonitoring } from '@/lib/monitoring'
 
-export async function POST(request: Request) {
+async function handler(request: Request) {
   try {
     // Rate limiting: 3 requests per hour per IP
     await ensureRateLimitTable()
@@ -98,3 +99,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to send message' }, { status: 500 })
   }
 }
+
+export const POST = withMonitoring(handler)

@@ -17,7 +17,7 @@ export const CaseStudies: CollectionConfig = {
       type: 'select',
       options: ['E-commerce', 'SaaS', 'Non-profit', 'Political', 'B2B', 'DTC', 'Finance', 'Healthcare'],
     },
-    { name: 'score', type: 'number', min: 0, max: 10 },
+    { name: 'score', type: 'number', min: 0, max: 10, index: true },
     { name: 'heroImage', type: 'upload', relationTo: 'media', required: true },
     {
       type: 'tabs',

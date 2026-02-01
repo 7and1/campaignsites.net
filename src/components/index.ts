@@ -18,6 +18,22 @@ export { ExitIntentModal } from './ExitIntentModal'
 export { ToolUsageTracker } from './ToolUsageTracker'
 export { AiLabClient } from './AiLabClient'
 export { UpvoteButton } from './UpvoteButton'
+export { FAQSection } from './FAQSection'
+export { GlobalSearch } from './GlobalSearch'
+export { ToolGuide, toolGuides } from './ToolGuide'
+export { Breadcrumbs, ToolBreadcrumbs } from './Breadcrumbs'
+export { ContentUpgrade, ExitIntentModal as ExitIntentModalUpgrade } from './ContentUpgrade'
+export { RelatedTools } from './RelatedTools'
+export { Pagination } from './Pagination'
+
+// P1 Frontend Enhancement Components
+export { FavoriteButton } from './FavoriteButton'
+export { ToolExportMenu } from './ToolExportMenu'
+export { UndoRedoControls } from './UndoRedoControls'
+export { AutoSaveIndicator } from './AutoSaveIndicator'
+export { A11yAudit } from './A11yAudit'
+export { NoScriptFallback } from './NoScriptFallback'
+export { KeyboardShortcutsHelp } from './KeyboardShortcutsHelp'
 
 // Detail page components
 export * from './detail'

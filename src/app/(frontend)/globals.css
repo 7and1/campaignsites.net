@@ -42,6 +42,16 @@ body {
   a {
     color: inherit;
   }
+
+  /* Mobile touch optimizations */
+  @media (pointer: coarse) {
+    input,
+    textarea,
+    select,
+    button {
+      font-size: 16px; /* Prevents zoom on iOS */
+    }
+  }
 }
 
 @layer components {
@@ -59,5 +69,25 @@ body {
 
   .soft-divider {
     @apply border-t border-white/70;
+  }
+
+  /* Mobile-optimized touch targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  .touch-target-lg {
+    @apply min-h-[48px] min-w-[48px];
+  }
+
+  /* Mobile form optimizations */
+  .mobile-form-input {
+    @apply min-h-[48px] text-base;
+  }
+
+  @media (min-width: 640px) {
+    .mobile-form-input {
+      @apply text-sm;
+    }
   }
 }

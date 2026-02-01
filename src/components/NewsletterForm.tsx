@@ -1,6 +1,7 @@
 'use client'
 
 import { memo, useState } from 'react'
+import { withCsrfToken } from '@/lib/csrf-client'
 
 const leadMagnets = [
   {
@@ -39,11 +40,11 @@ export const NewsletterForm = memo(function NewsletterForm({ source = 'site', co
     }
 
     try {
-      const response = await fetch('/api/subscribe', {
+      const response = await fetch('/api/subscribe', withCsrfToken({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      })
+      }))
 
       const data = await response.json() as { error?: string; message?: string }
       if (!response.ok) throw new Error(data?.error || 'Subscription failed')

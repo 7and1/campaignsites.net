@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { withCsrfToken } from '@/lib/csrf-client'
 
 interface ToolUsageTrackerProps {
   tool: string
@@ -26,11 +27,11 @@ function flushQueue() {
   const eventsToSend = [...eventQueue]
   eventQueue.length = 0
 
-  fetch('/api/track', {
+  fetch('/api/track', withCsrfToken({
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ events: eventsToSend }),
-  })
+  }))
     .catch(() => {
       // silently fail - tracking shouldn't break UX
     })

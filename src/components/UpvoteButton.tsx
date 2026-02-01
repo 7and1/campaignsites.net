@@ -2,6 +2,7 @@
 
 import { memo, useCallback, useEffect, useState } from 'react'
 import { ThumbsUp } from 'lucide-react'
+import { withCsrfToken } from '@/lib/csrf-client'
 
 interface UpvoteButtonProps {
   contentType: string
@@ -24,11 +25,11 @@ export const UpvoteButton = memo(function UpvoteButton({ contentType, slug }: Up
 
   const onUpvote = useCallback(async () => {
     setLoading(true)
-    const response = await fetch('/api/upvote', {
+    const response = await fetch('/api/upvote', withCsrfToken({
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ contentType, slug }),
-    })
+    }))
     const data = await response.json() as { count?: number }
     setCount(data.count || count)
     setLoading(false)

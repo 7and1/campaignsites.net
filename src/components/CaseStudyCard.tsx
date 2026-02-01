@@ -24,9 +24,9 @@ export const CaseStudyCard = memo(function CaseStudyCard({ study }: CaseStudyCar
         {imageUrl && (
           <Image
             src={imageUrl}
-            alt={study.title}
+            alt={`${study.title} - Campaign landing page case study`}
             fill
-            loading="lazy"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition duration-500 group-hover:scale-[1.03]"
           />
         )}

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
@@ -6,6 +7,35 @@ import { CaseStudyCard, JsonLd, NewsletterForm, PostCard, SectionHeading, ToolCa
 import type { CaseStudy, Post } from '@/lib/types'
 
 export const revalidate = 300
+
+export const metadata: Metadata = {
+  title: 'Campaign Landing Pages: Free Tools & Case Studies | CampaignSites.net',
+  description: 'Free campaign landing page tools, real-world case studies, and actionable playbooks. Build high-converting landing pages with countdown timers, UTM builders, budget calculators, and AI copy optimizers.',
+  keywords: ['campaign landing pages', 'landing page tools', 'conversion optimization', 'campaign tools', 'UTM builder', 'countdown timer', 'budget calculator', 'copy optimizer'],
+  openGraph: {
+    title: 'Campaign Landing Pages: Free Tools & Case Studies | CampaignSites.net',
+    description: 'Free campaign landing page tools, real-world case studies, and actionable playbooks. Build high-converting landing pages with our free toolkit.',
+    url: 'https://campaignsites.net',
+    type: 'website',
+    images: [
+      {
+        url: '/og?title=Campaign%20Landing%20Pages&subtitle=Free%20Tools%20%26%20Case%20Studies',
+        width: 1200,
+        height: 630,
+        alt: 'CampaignSites.net - Campaign Landing Page Tools and Resources',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Campaign Landing Pages: Free Tools & Case Studies | CampaignSites.net',
+    description: 'Free campaign landing page tools, real-world case studies, and actionable playbooks.',
+    images: ['/og?title=Campaign%20Landing%20Pages&subtitle=Free%20Tools%20%26%20Case%20Studies'],
+  },
+  alternates: {
+    canonical: 'https://campaignsites.net',
+  },
+}
 
 const tools = [
   {
@@ -85,7 +115,7 @@ export default async function HomePage() {
         '@id': 'https://campaignsites.net/#website',
         url: 'https://campaignsites.net',
         name: 'CampaignSites.net',
-        description: 'Free campaign tools, case studies, and playbooks to build landing pages that convert.',
+        description: 'Free campaign landing page tools, case studies, and playbooks to build high-converting marketing campaigns.',
         publisher: { '@id': 'https://campaignsites.net/#organization' },
         potentialAction: {
           '@type': 'SearchAction',
@@ -104,15 +134,37 @@ export default async function HomePage() {
         logo: {
           '@type': 'ImageObject',
           url: 'https://campaignsites.net/og?title=CampaignSites.net',
+          width: 1200,
+          height: 630,
         },
-        sameAs: [],
-        description: 'Free campaign tools, real-world landing page case studies, and actionable playbooks.',
+        sameAs: [
+          'https://twitter.com/campaignsites',
+          'https://github.com/campaignsites',
+        ],
+        contactPoint: {
+          '@type': 'ContactPoint',
+          contactType: 'Customer Service',
+          email: 'hello@campaignsites.net',
+          availableLanguage: 'English',
+        },
+        areaServed: 'Worldwide',
+        foundingDate: '2024',
+        knowsAbout: [
+          'Landing Page Optimization',
+          'Conversion Rate Optimization',
+          'Campaign Management',
+          'Marketing Analytics',
+          'A/B Testing',
+          'UTM Tracking',
+          'Copywriting',
+        ],
+        description: 'Free campaign landing page tools, real-world case studies, and actionable playbooks for conversion optimization.',
       },
       {
         '@type': 'ItemList',
         '@id': 'https://campaignsites.net/#tools',
-        name: 'Campaign Tools',
-        description: 'Free marketing tools for campaign optimization',
+        name: 'Campaign Landing Page Tools',
+        description: 'Free marketing tools for campaign landing page optimization',
         itemListElement: tools.map((tool, index) => ({
           '@type': 'SoftwareApplication',
           position: index + 1,
@@ -128,6 +180,52 @@ export default async function HomePage() {
           },
         })),
       },
+      {
+        '@type': 'FAQPage',
+        '@id': 'https://campaignsites.net/#faq',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'What is the difference between a landing page and a campaign landing page?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'A campaign landing page is a specific type of landing page designed for a marketing campaign. While all campaign landing pages are landing pages, not all landing pages are campaign landing pages. Campaign landing pages are tightly integrated with specific ads, emails, or promotions and typically have a shorter lifespan tied to the campaign duration.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'How long should a campaign landing page be?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'The ideal length depends on your offer complexity. Short pages work well for simple, low-commitment offers (free trials, newsletter signups). Long-form pages perform better for high-ticket items or complex services where visitors need more information to make a decision. Test both approaches to see what works for your audience.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'What is a good conversion rate for campaign landing pages?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'The average campaign landing page converts at 2.35%, but top performers achieve 5.31% or higher. E-commerce pages typically see 2-3% conversion rates, while B2B lead generation pages often achieve 5-15%. Your industry, traffic source, and offer quality all impact your benchmark.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Should I use video on my campaign landing pages?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Video can increase conversions by 80% when used correctly. Keep it short (60-90 seconds), place it above the fold, and ensure it loads quickly. Product demos and testimonials work particularly well. Always test with and without video to confirm it helps your specific audience.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'How do I track campaign landing page performance?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Use UTM parameters to track traffic sources, set up conversion goals in Google Analytics, and implement heatmaps (Hotjar, Crazy Egg) to understand user behavior. A/B testing tools like Google Optimize or Unbounce help you continuously improve. Our free UTM Builder tool makes tracking setup easy.',
+            },
+          },
+        ],
+      },
     ],
   }
 
@@ -141,11 +239,11 @@ export default async function HomePage() {
             <div>
               <p className="section-kicker">Campaign toolkit</p>
               <h1 className="mt-4 text-4xl font-semibold text-ink-900 sm:text-5xl lg:text-6xl">
-                Build campaigns that feel handcrafted, not cobbled together.
+                Build campaign landing pages that convert visitors into customers.
               </h1>
               <p className="mt-6 text-lg text-ink-600">
-                CampaignSites gives growth teams four free tools, fresh case studies, and weekly playbooks
-                so every landing page, email, and ad pushes conversion higher.
+                CampaignSites.net provides free campaign landing page tools, real-world case studies, and weekly playbooks
+                to help growth teams create high-converting landing pages, track campaigns with UTM parameters, and optimize copy for better results.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link
@@ -200,8 +298,8 @@ export default async function HomePage() {
         <div className="mx-auto max-w-6xl px-6">
           <SectionHeading
             kicker="Free tools"
-            title="Everything you need to launch a high-converting campaign"
-            description="Each tool is built for speed: start with a template, tweak it to your brand, and share with your team."
+            title="Free campaign landing page tools to boost conversions"
+            description="Our campaign landing page toolkit includes countdown timers, UTM builders, budget calculators, and AI copy optimizers. Each tool is built for speed: start with a template, tweak it to your brand, and share with your team."
           />
           <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {tools.map((tool) => (
@@ -215,8 +313,8 @@ export default async function HomePage() {
         <div className="mx-auto max-w-6xl px-6">
           <SectionHeading
             kicker="The data"
-            title="Why campaign optimization matters more than ever"
-            description="Most marketing teams leave money on the table. Here's what the numbers say about landing page performance."
+            title="Why campaign landing page optimization matters more than ever"
+            description="Most marketing teams leave money on the table. Here's what the numbers say about campaign landing page performance and conversion optimization."
           />
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             {whyItMatters.map((item) => (
@@ -233,24 +331,28 @@ export default async function HomePage() {
       <section className="py-16">
         <div className="mx-auto max-w-4xl px-6">
           <article className="prose prose-slate max-w-none">
-            <h2 className="text-2xl font-semibold text-ink-900">The Complete Guide to Campaign Landing Pages</h2>
+            <h2 className="text-2xl font-semibold text-ink-900">What Are Campaign Landing Pages?</h2>
 
             <p className="text-ink-600 leading-relaxed">
-              Think of a landing page like a rocket ship. You can have the most powerful engine in the world, but if your navigation system is off by even one degree, you will miss your target by thousands of miles. Campaign landing pages work the same way. Small details compound into massive differences in results.
+              <strong>Campaign landing pages are standalone web pages designed specifically for marketing campaigns.</strong> Unlike your homepage or product pages, campaign landing pages have a single focus: converting visitors who click from ads, emails, or social media into leads or customers. They eliminate navigation distractions, match the messaging from the traffic source, and guide visitors toward one clear call-to-action.
+            </p>
+
+            <p className="text-ink-600 leading-relaxed">
+              Think of a campaign landing page like a rocket ship. You can have the most powerful engine in the world, but if your navigation system is off by even one degree, you will miss your target by thousands of miles. Campaign landing pages work the same way. Small details compound into massive differences in results.
             </p>
 
             <p className="text-ink-600 leading-relaxed">
               The average business spends $92 to bring a visitor to their website but only $1 to convert them. That math is backwards. When you flip the ratio and invest in conversion optimization, every dollar you spend on traffic works harder. A landing page that converts at 5% instead of 2% does not just perform 2.5 times better. It fundamentally changes the economics of your entire marketing operation.
             </p>
 
-            <h3 className="text-xl font-semibold text-ink-900 mt-8">What Makes a Landing Page Convert</h3>
+            <h3 className="text-xl font-semibold text-ink-900 mt-8">What Makes a Campaign Landing Page Convert</h3>
 
             <p className="text-ink-600 leading-relaxed">
-              High-converting landing pages share five characteristics. First, they load fast. Google found that 53% of mobile visitors abandon pages that take longer than 3 seconds to load. Second, they have one clear call to action. Pages with a single CTA convert 266% better than pages with multiple competing options. Third, they use social proof strategically. Testimonials, logos, and review counts reduce perceived risk and build trust.
+              High-converting campaign landing pages share five characteristics. First, they load fast. Google found that 53% of mobile visitors abandon pages that take longer than 3 seconds to load. Second, they have one clear call to action. Pages with a single CTA convert 266% better than pages with multiple competing options. Third, they use social proof strategically. Testimonials, logos, and review counts reduce perceived risk and build trust.
             </p>
 
             <p className="text-ink-600 leading-relaxed">
-              Fourth, they match the message to the traffic source. When someone clicks an ad about &ldquo;free shipping,&rdquo; the landing page better mention free shipping above the fold. Message match alone can improve conversion rates by 50% or more. Fifth, they remove friction. Every form field you add reduces conversions by roughly 4%. Every extra click between landing and conversion costs you customers.
+              Fourth, they match the message to the traffic source. When someone clicks an ad about &ldquo;free shipping,&rdquo; the campaign landing page better mention free shipping above the fold. Message match alone can improve conversion rates by 50% or more. Fifth, they remove friction. Every form field you add reduces conversions by roughly 4%. Every extra click between landing and conversion costs you customers.
             </p>
 
             <h3 className="text-xl font-semibold text-ink-900 mt-8">The Psychology Behind Urgency and Scarcity</h3>
@@ -306,12 +408,41 @@ export default async function HomePage() {
             <h3 className="text-xl font-semibold text-ink-900 mt-8">Mobile Optimization: Where Most Campaigns Fail</h3>
 
             <p className="text-ink-600 leading-relaxed">
-              More than 60% of web traffic now comes from mobile devices, but most landing pages are still designed desktop-first. That mismatch costs real money. Mobile users have different needs, different attention spans, and different conversion patterns. A page that works great on desktop might be unusable on a phone.
+              More than 60% of web traffic now comes from mobile devices, but most campaign landing pages are still designed desktop-first. That mismatch costs real money. Mobile users have different needs, different attention spans, and different conversion patterns. A page that works great on desktop might be unusable on a phone.
             </p>
 
             <p className="text-ink-600 leading-relaxed">
               Mobile optimization means more than responsive design. It means larger tap targets, shorter forms, faster load times, and thumb-friendly layouts. It means testing on actual devices, not just browser simulators. The teams that take mobile seriously consistently outperform those that treat it as an afterthought.
             </p>
+
+            <h3 className="text-xl font-semibold text-ink-900 mt-8">Frequently Asked Questions About Campaign Landing Pages</h3>
+
+            <div className="mt-6 space-y-6">
+              <div className="glass-panel p-6">
+                <h4 className="font-semibold text-ink-900">What is the difference between a landing page and a campaign landing page?</h4>
+                <p className="mt-2 text-ink-600">A campaign landing page is a specific type of landing page designed for a marketing campaign. While all campaign landing pages are landing pages, not all landing pages are campaign landing pages. Campaign landing pages are tightly integrated with specific ads, emails, or promotions and typically have a shorter lifespan tied to the campaign duration.</p>
+              </div>
+
+              <div className="glass-panel p-6">
+                <h4 className="font-semibold text-ink-900">How long should a campaign landing page be?</h4>
+                <p className="mt-2 text-ink-600">The ideal length depends on your offer complexity. Short pages work well for simple, low-commitment offers (free trials, newsletter signups). Long-form pages perform better for high-ticket items or complex services where visitors need more information to make a decision. Test both approaches to see what works for your audience.</p>
+              </div>
+
+              <div className="glass-panel p-6">
+                <h4 className="font-semibold text-ink-900">What is a good conversion rate for campaign landing pages?</h4>
+                <p className="mt-2 text-ink-600">The average campaign landing page converts at 2.35%, but top performers achieve 5.31% or higher. E-commerce pages typically see 2-3% conversion rates, while B2B lead generation pages often achieve 5-15%. Your industry, traffic source, and offer quality all impact your benchmark.</p>
+              </div>
+
+              <div className="glass-panel p-6">
+                <h4 className="font-semibold text-ink-900">Should I use video on my campaign landing pages?</h4>
+                <p className="mt-2 text-ink-600">Video can increase conversions by 80% when used correctly. Keep it short (60-90 seconds), place it above the fold, and ensure it loads quickly. Product demos and testimonials work particularly well. Always test with and without video to confirm it helps your specific audience.</p>
+              </div>
+
+              <div className="glass-panel p-6">
+                <h4 className="font-semibold text-ink-900">How do I track campaign landing page performance?</h4>
+                <p className="mt-2 text-ink-600">Use UTM parameters to track traffic sources, set up conversion goals in Google Analytics, and implement heatmaps (Hotjar, Crazy Egg) to understand user behavior. A/B testing tools like Google Optimize or Unbounce help you continuously improve. Our free UTM Builder tool makes tracking setup easy.</p>
+              </div>
+            </div>
           </article>
         </div>
       </section>

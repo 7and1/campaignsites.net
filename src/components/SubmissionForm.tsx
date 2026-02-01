@@ -1,6 +1,7 @@
 'use client'
 
 import { memo, useState } from 'react'
+import { withCsrfToken } from '@/lib/csrf-client'
 
 export const SubmissionForm = memo(function SubmissionForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -14,11 +15,11 @@ export const SubmissionForm = memo(function SubmissionForm() {
     const payload = Object.fromEntries(formData.entries())
 
     try {
-      const response = await fetch('/api/submit', {
+      const response = await fetch('/api/submit', withCsrfToken({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      })
+      }))
 
       const data = await response.json() as { error?: string; message?: string }
       if (!response.ok) throw new Error(data?.error || 'Submission failed')

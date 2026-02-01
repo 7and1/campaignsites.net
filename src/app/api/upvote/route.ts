@@ -3,6 +3,7 @@ import { ensureAnalyticsTables, getDatabase, hashIp } from '@/lib/analytics'
 import { upvoteSchema } from '@/lib/zod-schemas'
 import { checkRateLimit, getRateLimitIdentifier, ensureRateLimitTable } from '@/lib/rate-limit'
 import { logError } from '@/lib/errors'
+import { withMonitoring } from '@/lib/monitoring'
 
 export async function GET(request: Request) {
   try {
@@ -22,14 +23,14 @@ export async function GET(request: Request) {
       .bind(contentType, slug)
       .all()
 
-    return NextResponse.json({ count: results[0]?.count || 0 })
+    return NextResponse.json({ count: (results[0] as { count: number })?.count || 0 })
   } catch (error) {
     logError('upvote-get', error)
     return NextResponse.json({ error: 'Failed to load upvotes' }, { status: 500 })
   }
 }
 
-export async function POST(request: Request) {
+async function handlePost(request: Request) {
   try {
     // Rate limiting: 10 upvotes per minute per IP
     await ensureRateLimitTable()
@@ -86,9 +87,11 @@ export async function POST(request: Request) {
       .bind(contentType, slug)
       .all()
 
-    return NextResponse.json({ count: results[0]?.count || 0 })
+    return NextResponse.json({ count: (results[0] as { count: number })?.count || 0 })
   } catch (error) {
     logError('upvote-post', error)
     return NextResponse.json({ error: 'Failed to record upvote' }, { status: 500 })
   }
 }
+
+export const POST = withMonitoring(handlePost)

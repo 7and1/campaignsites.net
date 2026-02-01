@@ -3,14 +3,42 @@
 import { useState, useCallback, useEffect } from 'react'
 import { RefreshCw, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react'
 import { analyzeCopy } from '@/app/actions/analyze-copy'
-import { AffiliateCTA, ExitIntentModal, ToolUsageTracker } from '@/components'
+import { AffiliateCTA, ExitIntentModal, ToolUsageTracker, FAQSection } from '@/components'
 import { AFFILIATE_URLS } from '@/lib/constants'
 import type { CopyAnalysisResult } from '@/lib/types'
 import { Button, Alert, CardSkeleton } from '@/components/ui'
+import { withCsrfToken } from '@/lib/csrf-client'
+import { useToolHistoryStore } from '@/lib/stores/toolHistoryStore'
+import { toast } from 'sonner'
+import { copyToClipboard } from '@/lib/utils/export'
+
+const copyFAQItems = [
+  {
+    question: 'What makes a good landing page headline?',
+    answer: 'A great headline is specific, benefit-driven, and creates curiosity. It should speak directly to your target audience, promise a clear outcome, and make them want to read more. Avoid generic phrases like "Welcome" or "About Us." Instead, use specific claims like "How to Double Your Conversion Rate in 30 Days" that promise tangible results.',
+  },
+  {
+    question: 'How long should my CTA button text be?',
+    answer: 'The best CTA buttons are typically 2-5 words. They should be action-oriented and benefit-focused. "Get My Free Guide" outperforms "Submit" because it tells the user exactly what they will receive. First-person CTAs ("Get My...") often outperform second-person ("Get Your...") by 25-90% in A/B tests.',
+  },
+  {
+    question: 'How does the AI Copy Optimizer work?',
+    answer: 'Our AI analyzes your copy against proven conversion frameworks like the 4 Us (Urgent, Unique, Useful, Ultra-specific) and emotional triggers. It scores your text on multiple dimensions and suggests improvements based on patterns from high-performing campaigns. The AI variants are generated using these same principles.',
+  },
+  {
+    question: 'What is a good conversion score?',
+    answer: 'Scores of 80+ indicate strong conversion potential—test these in your campaigns. Scores of 60-79 are good but have room for improvement. Scores below 60 suggest significant issues that should be addressed before launching. Remember, the score is a guideline—always A/B test to confirm what works for your specific audience.',
+  },
+  {
+    question: 'Should I test multiple headline variants?',
+    answer: 'Absolutely. Even experienced copywriters are wrong about what will resonate about 50% of the time. A/B testing 2-3 headline variants is one of the highest-ROI activities you can do. Start with our AI-generated variants, run them for at least 100 conversions each, then iterate on the winner.',
+  },
+]
 
 type CopyType = 'headline' | 'cta'
 
 export default function CopyOptimizerClient() {
+  const addToHistory = useToolHistoryStore((state) => state.addToHistory)
   const [text, setText] = useState('')
   const [type, setType] = useState<CopyType>('headline')
   const [loading, setLoading] = useState(false)
@@ -40,22 +68,28 @@ export default function CopyOptimizerClient() {
     setResult(null)
 
     try {
-      await fetch('/api/track', {
+      await fetch('/api/track', withCsrfToken({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ eventType: 'tool_action', toolSlug: 'copy-optimizer', context: 'analyze' }),
-      }).catch(() => {
+      })).catch(() => {
         // Ignore tracking errors
       })
 
       const response = await analyzeCopy(text.trim(), type)
       setResult(response)
+
+      addToHistory({
+        toolId: 'copy-optimizer',
+        toolName: 'Copy Optimizer',
+        data: { text, type, score: response.score },
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to analyze copy. Please try again.')
     } finally {
       setLoading(false)
     }
-  }, [text, type, isValid])
+  }, [text, type, isValid, addToHistory])
 
   const handleRetry = useCallback(() => {
     analyze()
@@ -67,10 +101,13 @@ export default function CopyOptimizerClient() {
     setError(null)
   }, [])
 
-  const handleVariantClick = useCallback((variant: string, index: number) => {
+  const handleVariantClick = useCallback(async (variant: string, index: number) => {
     setText(variant)
     setCopiedVariant(index)
-    navigator.clipboard.writeText(variant).catch(() => {})
+    const success = await copyToClipboard(variant)
+    if (success) {
+      toast.success('Variant copied to clipboard')
+    }
     setTimeout(() => setCopiedVariant(null), 2000)
   }, [])
 
@@ -344,6 +381,13 @@ export default function CopyOptimizerClient() {
           </div>
         </div>
       </section>
+
+      <FAQSection
+        title="Copy Optimization FAQ"
+        description="Common questions about writing high-converting headlines and CTAs."
+        items={copyFAQItems}
+        pageUrl="https://campaignsites.net/tools/copy-optimizer"
+      />
 
       <ExitIntentModal
         title="Go deeper than headlines"

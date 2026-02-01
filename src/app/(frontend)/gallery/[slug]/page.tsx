@@ -5,14 +5,31 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { ArrowLeft, ExternalLink, Lightbulb, Star } from 'lucide-react'
-import { AffiliateCTA, CaseStudyCard, JsonLd, ShareBar, UpvoteButton } from '@/components'
+import { AffiliateCTA, Breadcrumbs, CaseStudyCard, JsonLd, ShareBar, UpvoteButton } from '@/components'
 import { renderLexicalHtml } from '@/lib/richtext'
 import type { CaseStudy, Tool } from '@/lib/types'
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-static'
+export const revalidate = 300
+export const dynamicParams = true
 
 interface CaseStudyPageProps {
   params: Promise<{ slug: string }>
+}
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'case-studies',
+    limit: 1000,
+    select: {
+      slug: true,
+    },
+  })
+
+  return docs.map((study) => ({
+    slug: study.slug,
+  }))
 }
 
 export async function generateMetadata({ params }: CaseStudyPageProps): Promise<Metadata> {
@@ -204,9 +221,17 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
       <div className="border-b border-white/70 bg-white/80">
         <div className="mx-auto max-w-6xl px-6 py-5">
-          <Link href="/gallery" className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-ink-500 hover:text-primary-600">
-            <ArrowLeft className="h-4 w-4" /> Back to Gallery
-          </Link>
+          <div className="flex items-center justify-between">
+            <Breadcrumbs
+              items={[
+                { label: 'Gallery', href: '/gallery' },
+                { label: study.title },
+              ]}
+            />
+            <Link href="/gallery" className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-ink-500 hover:text-primary-600">
+              <ArrowLeft className="h-4 w-4" /> Back
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -233,9 +258,15 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                 <div className="relative aspect-[16/9]">
                   <Image
                     src={typeof study.heroImage === 'string' ? study.heroImage : typeof study.heroImage === 'object' && study.heroImage.url ? study.heroImage.url : ''}
-                    alt={study.title}
+                    alt={
+                      typeof study.heroImage === 'object' && study.heroImage.alt
+                        ? study.heroImage.alt
+                        : `${study.title} - ${study.brand || 'Campaign'} landing page case study`
+                    }
                     fill
                     className="object-cover"
+                    priority
+                    fetchPriority="high"
                   />
                 </div>
               </div>

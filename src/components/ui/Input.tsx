@@ -41,10 +41,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               hasError ? errorId : hasSuccess ? successId : description ? descriptionId : undefined
             }
             className={cn(
-              'w-full rounded-xl border px-4 py-2.5 text-sm transition-colors',
+              'w-full rounded-xl border px-4 py-2.5 text-base sm:text-sm transition-colors',
               'placeholder:text-ink-400',
               'focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-0',
               'disabled:cursor-not-allowed disabled:opacity-50',
+              'min-h-[48px] sm:min-h-[44px]',
               hasError && 'border-rose-300 focus:ring-rose-300',
               hasSuccess && 'border-emerald-300 focus:ring-emerald-300',
               !hasError && !hasSuccess && 'border-mist-200',
@@ -119,10 +120,11 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               hasError ? errorId : hasSuccess ? successId : description ? descriptionId : undefined
             }
             className={cn(
-              'w-full rounded-xl border px-4 py-2.5 text-sm transition-colors',
+              'w-full rounded-xl border px-4 py-2.5 text-base sm:text-sm transition-colors',
               'placeholder:text-ink-400',
               'focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-0',
               'disabled:cursor-not-allowed disabled:opacity-50',
+              'min-h-[96px]',
               hasError && 'border-rose-300 focus:ring-rose-300',
               hasSuccess && 'border-emerald-300 focus:ring-emerald-300',
               !hasError && !hasSuccess && 'border-mist-200',
@@ -186,9 +188,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           aria-invalid={hasError}
           aria-describedby={hasError ? errorId : description ? descriptionId : undefined}
           className={cn(
-            'w-full rounded-xl border border-mist-200 px-4 py-2.5 text-sm transition-colors',
+            'w-full rounded-xl border border-mist-200 px-4 py-2.5 text-base sm:text-sm transition-colors',
             'focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-0',
             'disabled:cursor-not-allowed disabled:opacity-50',
+            'min-h-[48px] sm:min-h-[44px]',
             hasError && 'border-rose-300 focus:ring-rose-300',
             className
           )}

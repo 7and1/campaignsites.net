@@ -29,6 +29,6 @@ export const Tools: CollectionConfig = {
       ],
     },
     { name: 'pricing', type: 'text', label: 'Pricing Info' },
-    { name: 'rating', type: 'number', min: 0, max: 5 },
+    { name: 'rating', type: 'number', min: 0, max: 5, index: true },
   ],
 }

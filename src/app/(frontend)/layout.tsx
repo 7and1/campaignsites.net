@@ -7,33 +7,39 @@ import { AnalyticsScripts } from '@/components/AnalyticsScripts'
 import { CookieNotice } from '@/components/CookieNotice'
 import { UTMTracker } from '@/components/UTMTracker'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
+import { WebVitals } from '@/components/WebVitals'
+import { Toaster } from '@/components/ui/Toast'
+import { NoScriptFallback } from '@/components/NoScriptFallback'
 
 const bodyFont = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-body',
-  display: 'swap',
+  display: 'optional',
   preload: true,
+  adjustFontFallback: true,
 })
 
 const displayFont = Fraunces({
   subsets: ['latin'],
   variable: '--font-display',
-  display: 'swap',
+  display: 'optional',
   preload: true,
   weight: ['400', '700'],
+  adjustFontFallback: true,
 })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://campaignsites.net'),
   title: {
-    default: 'CampaignSites.net — Campaign Landing Page Tools & Resources',
+    default: 'Campaign Landing Pages: Free Tools & Case Studies | CampaignSites.net',
     template: '%s | CampaignSites.net',
   },
   description:
-    'Free campaign tools, real-world landing page case studies, and actionable playbooks to build marketing that converts.',
+    'Free campaign landing page tools, real-world case studies, and actionable playbooks for growth teams. Build high-converting landing pages with countdown timers, UTM builders, budget calculators, and AI copy optimizers. Start optimizing today.',
   applicationName: 'CampaignSites.net',
   keywords: [
     'campaign landing pages',
+    'landing page tools',
     'conversion optimization',
     'utm builder',
     'marketing tools',
@@ -42,8 +48,11 @@ export const metadata: Metadata = {
     'countdown timer',
     'budget calculator',
     'copy optimizer',
+    'landing page optimization',
+    'campaign tools',
+    'high-converting landing pages',
   ],
-  authors: [{ name: 'CampaignSites.net', url: 'https://campaignsites.net' }],
+  authors: [{ name: 'CampaignSites.net Editorial Team', url: 'https://campaignsites.net/about' }],
   creator: 'CampaignSites.net',
   publisher: 'CampaignSites.net',
   alternates: {
@@ -52,27 +61,27 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: 'https://campaignsites.net',
-    title: 'CampaignSites.net — Campaign Landing Page Tools & Resources',
+    title: 'Campaign Landing Pages: Free Tools & Case Studies | CampaignSites.net',
     description:
-      'Free campaign tools, real-world landing page case studies, and actionable playbooks to build marketing that converts.',
+      'Free campaign landing page tools, real-world case studies, and actionable playbooks. Build high-converting landing pages with our free toolkit.',
     siteName: 'CampaignSites.net',
     locale: 'en_US',
     images: [
       {
-        url: '/og?title=CampaignSites.net&subtitle=Campaign%20tools%20for%20teams%20that%20ship',
+        url: '/og?title=Campaign%20Landing%20Pages&subtitle=Free%20Tools%20%26%20Case%20Studies',
         width: 1200,
         height: 630,
-        alt: 'CampaignSites.net',
+        alt: 'CampaignSites.net - Campaign Landing Page Tools and Resources',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@campaignsites',
-    title: 'CampaignSites.net — Campaign Landing Page Tools & Resources',
+    title: 'Campaign Landing Pages: Free Tools & Case Studies | CampaignSites.net',
     description:
-      'Free campaign tools, real-world landing page case studies, and actionable playbooks to build marketing that converts.',
-    images: ['/og?title=CampaignSites.net&subtitle=Campaign%20tools%20for%20teams%20that%20ship'],
+      'Free campaign landing page tools, real-world case studies, and actionable playbooks.',
+    images: ['/og?title=Campaign%20Landing%20Pages&subtitle=Free%20Tools%20%26%20Case%20Studies'],
   },
   robots: {
     index: true,
@@ -92,10 +101,18 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#2563eb',
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${bodyFont.variable} ${displayFont.variable} font-sans antialiased text-ink-900`}>
+        <NoScriptFallback />
         <Header />
         <UTMTracker />
         <ErrorBoundary>
@@ -104,6 +121,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <CookieNotice />
         <AnalyticsScripts />
+        <WebVitals />
+        <Toaster />
       </body>
     </html>
   )

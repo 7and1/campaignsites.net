@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server'
-import { ensureAnalyticsTables, getDatabase, hashIp } from '@/lib/analytics'
+import { ensureAnalyticsTables, getDatabase } from '@/lib/analytics'
 import { trackSchema } from '@/lib/zod-schemas'
 import { checkRateLimit, getRateLimitIdentifier, ensureRateLimitTable } from '@/lib/rate-limit'
 import { sanitizeUtm } from '@/lib/sanitization'
+import { withMonitoring } from '@/lib/monitoring'
+import { logError } from '@/lib/errors'
 
-export async function POST(request: Request) {
+async function handler(request: Request) {
   try {
     // Rate limiting: 100 requests per minute per IP for analytics
     await ensureRateLimitTable()
@@ -18,7 +20,14 @@ export async function POST(request: Request) {
     if (!rateLimitResult.success) {
       return NextResponse.json(
         { error: 'Too many tracking requests' },
-        { status: 429 }
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': String(rateLimitResult.limit),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.resetAt),
+          },
+        }
       )
     }
 
@@ -70,9 +79,31 @@ export async function POST(request: Request) {
       )
       .run()
 
-    return NextResponse.json({ ok: true })
+    return NextResponse.json(
+      { ok: true },
+      {
+        headers: {
+          'X-RateLimit-Limit': String(rateLimitResult.limit),
+          'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+          'X-RateLimit-Reset': String(rateLimitResult.resetAt),
+        },
+      }
+    )
   } catch (error) {
-    console.error('track error', error)
+    logError('track', error)
     return NextResponse.json({ error: 'Failed to track event' }, { status: 500 })
   }
 }
+
+import crypto from 'crypto'
+
+function hashIp(ip: string | null): string | null {
+  if (!ip) return null
+  const secret = process.env.PAYLOAD_SECRET
+  if (!secret) {
+    throw new Error('PAYLOAD_SECRET environment variable is required for IP hashing')
+  }
+  return crypto.createHmac('sha256', secret).update(ip).digest('hex')
+}
+
+export const POST = withMonitoring(handler)

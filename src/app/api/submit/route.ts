@@ -3,8 +3,9 @@ import { ensureAnalyticsTables, getDatabase } from '@/lib/analytics'
 import { caseStudySchema } from '@/lib/zod-schemas'
 import { checkRateLimit, getRateLimitIdentifier, ensureRateLimitTable } from '@/lib/rate-limit'
 import { logError } from '@/lib/errors'
+import { withMonitoring } from '@/lib/monitoring'
 
-export async function POST(request: Request) {
+async function handler(request: Request) {
   try {
     // Rate limiting: 3 submissions per day per IP
     await ensureRateLimitTable()
@@ -18,7 +19,14 @@ export async function POST(request: Request) {
     if (!rateLimitResult.success) {
       return NextResponse.json(
         { error: 'Too many submission attempts. Please try again later.' },
-        { status: 429 }
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': String(rateLimitResult.limit),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.resetAt),
+          },
+        }
       )
     }
 
@@ -55,3 +63,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to submit case study' }, { status: 500 })
   }
 }
+
+export const POST = withMonitoring(handler)

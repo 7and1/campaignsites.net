@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { memo } from 'react'
+import { GlobalSearch } from './GlobalSearch'
 
 const navigation = [
   { name: 'Tools', href: '/tools' },
@@ -17,7 +18,7 @@ export const Header = memo(function Header() {
           Campaign<span className="text-primary-600">Sites</span>
         </Link>
 
-        <nav className="flex flex-wrap items-center gap-4 text-xs font-semibold uppercase tracking-[0.2em] text-ink-500 md:gap-6">
+        <nav className="hidden md:flex flex-wrap items-center gap-4 text-xs font-semibold uppercase tracking-[0.2em] text-ink-500 lg:gap-6">
           {navigation.map((item) => (
             <Link
               key={item.name}
@@ -30,6 +31,7 @@ export const Header = memo(function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <GlobalSearch />
           <Link
             href="/resources"
             className="hidden items-center rounded-full border border-ink-200 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-ink-700 transition hover:border-primary-300 md:inline-flex"

@@ -11,13 +11,19 @@ export const getDatabase = async (): Promise<D1Database> => {
 }
 
 /**
- * Hash IP address with salt for privacy
- * Uses salt from environment or a default fallback
+ * Hash IP address using HMAC-SHA256 for privacy and security
+ * Uses PAYLOAD_SECRET as the HMAC key for cryptographic security
+ * HMAC prevents length extension attacks and provides authentication
+ * @throws Error if PAYLOAD_SECRET is not configured
  */
 export const hashIp = (ip: string | null): string | null => {
   if (!ip) return null
-  const salt = process.env.IP_HASH_SALT || 'campaignsites-default-salt-change-in-production'
-  return crypto.createHash('sha256').update(`${ip}${salt}`).digest('hex')
+  const secret = process.env.PAYLOAD_SECRET
+  if (!secret) {
+    throw new Error('PAYLOAD_SECRET environment variable is required for IP hashing')
+  }
+  // Use HMAC-SHA256 instead of plain SHA-256 for cryptographic security
+  return crypto.createHmac('sha256', secret).update(ip).digest('hex')
 }
 
 export const ensureAnalyticsTables = async (db: D1Database): Promise<void> => {
@@ -48,6 +54,11 @@ export const ensureAnalyticsTables = async (db: D1Database): Promise<void> => {
       lead_magnet TEXT,
       source TEXT,
       status TEXT DEFAULT 'active',
+      preferences TEXT,
+      unsubscribed_at TEXT,
+      unsubscribe_reason TEXT,
+      unsubscribe_feedback TEXT,
+      updated_at TEXT,
       created_at TEXT DEFAULT (datetime('now'))
     );
 
