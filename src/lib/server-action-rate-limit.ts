@@ -5,7 +5,6 @@
 
 import { headers } from 'next/headers'
 import { checkRateLimit } from './rate-limit'
-import crypto from 'crypto'
 
 /**
  * Rate limit configuration for server actions
@@ -36,7 +35,7 @@ export class RateLimitError extends Error {
 
 /**
  * Get IP address from server action context
- * Uses HMAC-SHA256 for secure hashing
+ * Uses Web Crypto API for secure hashing
  * Returns a fallback identifier in test/development environments
  */
 async function getServerActionIdentifier(): Promise<string> {
@@ -48,9 +47,19 @@ async function getServerActionIdentifier(): Promise<string> {
       headersList.get('x-real-ip') ||
       'anonymous'
 
-    // Use HMAC-SHA256 for secure IP hashing
+    // Use Web Crypto API for secure IP hashing
     const secret = process.env.PAYLOAD_SECRET || 'fallback-secret'
-    return crypto.createHmac('sha256', secret).update(ip).digest('hex')
+    const encoder = new TextEncoder()
+    const keyData = encoder.encode(secret)
+    const key = await crypto.subtle.importKey(
+      'raw',
+      keyData,
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    )
+    const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(ip))
+    return Array.from(new Uint8Array(signature), byte => byte.toString(16).padStart(2, '0')).join('')
   } catch (error) {
     // In test/development environments where headers() is not available,
     // return a consistent test identifier

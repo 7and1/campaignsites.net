@@ -1,4 +1,3 @@
-import crypto from 'crypto'
 import { cookies } from 'next/headers'
 
 const CSRF_COOKIE_NAME = 'csrf_token'
@@ -12,10 +11,12 @@ const CSRF_COOKIE_MAX_AGE = 60 * 60 * 24 // 24 hours
 export { CSRF_COOKIE_NAME, CSRF_HEADER_NAME }
 
 /**
- * Generate a cryptographically secure CSRF token
+ * Generate a cryptographically secure CSRF token using Web Crypto API
  */
 export function generateCsrfToken(): string {
-  return crypto.randomBytes(CSRF_TOKEN_LENGTH).toString('hex')
+  const array = new Uint8Array(CSRF_TOKEN_LENGTH)
+  crypto.getRandomValues(array)
+  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('')
 }
 
 /**

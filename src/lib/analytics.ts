@@ -1,4 +1,3 @@
-import crypto from 'crypto'
 import { getCloudflareEnv } from '@/lib/cloudflare'
 import type { D1Database } from './types'
 
@@ -14,16 +13,27 @@ export const getDatabase = async (): Promise<D1Database> => {
  * Hash IP address using HMAC-SHA256 for privacy and security
  * Uses PAYLOAD_SECRET as the HMAC key for cryptographic security
  * HMAC prevents length extension attacks and provides authentication
+ * Uses Web Crypto API for edge runtime compatibility
  * @throws Error if PAYLOAD_SECRET is not configured
  */
-export const hashIp = (ip: string | null): string | null => {
+export const hashIp = async (ip: string | null): Promise<string | null> => {
   if (!ip) return null
   const secret = process.env.PAYLOAD_SECRET
   if (!secret) {
     throw new Error('PAYLOAD_SECRET environment variable is required for IP hashing')
   }
-  // Use HMAC-SHA256 instead of plain SHA-256 for cryptographic security
-  return crypto.createHmac('sha256', secret).update(ip).digest('hex')
+  // Use Web Crypto API HMAC-SHA256 for edge runtime compatibility
+  const encoder = new TextEncoder()
+  const keyData = encoder.encode(secret)
+  const key = await crypto.subtle.importKey(
+    'raw',
+    keyData,
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  )
+  const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(ip))
+  return Array.from(new Uint8Array(signature), byte => byte.toString(16).padStart(2, '0')).join('')
 }
 
 export const ensureAnalyticsTables = async (db: D1Database): Promise<void> => {

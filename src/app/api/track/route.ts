@@ -51,7 +51,7 @@ async function handler(request: Request): Promise<NextResponse> {
       request.headers.get('x-forwarded-for') ||
       request.headers.get('x-real-ip')
 
-    const ipHash = hashIp(ip)
+    const ipHash = await hashIp(ip)
     const userAgent = request.headers.get('user-agent')?.substring(0, 500) || null
 
     // Sanitize UTM parameters
@@ -94,15 +94,24 @@ async function handler(request: Request): Promise<NextResponse> {
   }
 }
 
-import crypto from 'crypto'
-
-function hashIp(ip: string | null): string | null {
+async function hashIp(ip: string | null): Promise<string | null> {
   if (!ip) return null
   const secret = process.env.PAYLOAD_SECRET
   if (!secret) {
     throw new Error('PAYLOAD_SECRET environment variable is required for IP hashing')
   }
-  return crypto.createHmac('sha256', secret).update(ip).digest('hex')
+  // Use Web Crypto API for edge runtime compatibility
+  const encoder = new TextEncoder()
+  const keyData = encoder.encode(secret)
+  const key = await crypto.subtle.importKey(
+    'raw',
+    keyData,
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  )
+  const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(ip))
+  return Array.from(new Uint8Array(signature), byte => byte.toString(16).padStart(2, '0')).join('')
 }
 
 export const POST = withMonitoring(handler)

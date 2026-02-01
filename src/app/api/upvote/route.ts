@@ -67,7 +67,7 @@ async function handlePost(request: Request): Promise<NextResponse> {
       request.headers.get('cf-connecting-ip') ||
       request.headers.get('x-forwarded-for') ||
       request.headers.get('x-real-ip')
-    const ipHash = hashIp(ip)
+    const ipHash = await hashIp(ip)
 
     if (!ipHash) {
       return NextResponse.json({ error: 'Unable to identify voter' }, { status: 400 })
