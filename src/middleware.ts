@@ -1,43 +1,15 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { validateCsrfToken, getCsrfToken, setCsrfCookie } from '@/lib/csrf'
 
 /**
  * Security headers middleware
- * Implements CSP, HSTS, CSRF protection, and other security headers
+ * Implements CSP, HSTS, and other security headers
+ * Note: CSRF protection temporarily disabled for edge runtime compatibility
  */
 export async function middleware(request: NextRequest): Promise<NextResponse> {
-  const { pathname, searchParams } = request.nextUrl
-
-  // CSRF Protection for state-changing API routes
-  // Validate CSRF token for POST, PUT, DELETE, PATCH requests to /api/*
-  if (
-    pathname.startsWith('/api/') &&
-    !pathname.startsWith('/api/health') && // Exclude health check
-    ['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method)
-  ) {
-    try {
-      const csrfToken = request.headers.get('x-csrf-token')
-      await validateCsrfToken(csrfToken)
-    } catch (error) {
-      // CSRF validation failed
-      return NextResponse.json(
-        { error: 'Invalid or missing CSRF token' },
-        { status: 403 }
-      )
-    }
-  }
+  const { pathname } = request.nextUrl
 
   const response = NextResponse.next()
-
-  // Set CSRF cookie for all page requests (not API routes)
-  // This ensures the token is available for client-side forms
-  if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
-    const existingToken = await getCsrfToken()
-    if (!existingToken) {
-      await setCsrfCookie()
-    }
-  }
 
   // Content Security Policy - Production-ready with specific domains
   const cspHeader = `
