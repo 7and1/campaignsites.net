@@ -27,18 +27,25 @@ interface BlogPostPageProps {
 }
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config })
-  const { docs } = await payload.find({
-    collection: 'posts',
-    limit: 1000,
-    select: {
-      slug: true,
-    },
-  })
+  try {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'posts',
+      limit: 1000,
+      select: {
+        slug: true,
+      },
+    })
 
-  return docs.map((post) => ({
-    slug: post.slug,
-  }))
+    return docs.map((post) => ({
+      slug: post.slug,
+    }))
+  } catch (error) {
+    // During build time, database may not be available
+    // Return empty array and rely on dynamicParams = true
+    console.warn('Failed to generate static params for blog posts:', error)
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {

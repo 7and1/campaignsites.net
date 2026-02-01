@@ -18,18 +18,24 @@ interface CaseStudyPageProps {
 }
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config })
-  const { docs } = await payload.find({
-    collection: 'case-studies',
-    limit: 1000,
-    select: {
-      slug: true,
-    },
-  })
+  try {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'case-studies',
+      limit: 1000,
+      select: {
+        slug: true,
+      },
+    })
 
-  return docs.map((study) => ({
-    slug: study.slug,
-  }))
+    return docs.map((study) => ({
+      slug: study.slug,
+    }))
+  } catch (error) {
+    // During build time, database may not be available
+    console.warn('Failed to generate static params for case studies:', error)
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: CaseStudyPageProps): Promise<Metadata> {
