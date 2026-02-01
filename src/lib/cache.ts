@@ -206,7 +206,7 @@ export async function getFromCache<T>(key: string): Promise<T | null> {
     logger.debug(`Cache miss: ${key}`)
     return null
   } catch (error) {
-    logger.error('Cache get error', { key, error })
+    logger.error('Cache get error', error instanceof Error ? error : undefined, { key })
     return null
   }
 }
@@ -236,7 +236,7 @@ export async function setInCache<T>(
 
     logger.debug(`Cache set: ${key} (TTL: ${ttl}s)`)
   } catch (error) {
-    logger.error('Cache set error', { key, error })
+    logger.error('Cache set error', error instanceof Error ? error : undefined, { key })
   }
 }
 
@@ -255,7 +255,7 @@ export async function deleteFromCache(key: string): Promise<void> {
     await kv.delete(key)
     logger.debug(`Cache deleted: ${key}`)
   } catch (error) {
-    logger.error('Cache delete error', { key, error })
+    logger.error('Cache delete error', error instanceof Error ? error : undefined, { key })
   }
 }
 
@@ -282,7 +282,7 @@ export async function invalidateCacheByTag(tag: string): Promise<void> {
 
     logger.info(`Cache invalidated for tag: ${tag} (${list.keys.length} keys)`)
   } catch (error) {
-    logger.error('Cache invalidation error', { tag, error })
+    logger.error('Cache invalidation error', error instanceof Error ? error : undefined, { tag })
   }
 }
 

@@ -77,7 +77,8 @@ export async function getDatabaseStats(): Promise<{
 
   const tables = []
   for (const table of tablesResult.results as Array<{ name: string }>) {
-    const countResult = await db.prepare(`SELECT COUNT(*) as count FROM ${table.name}`).first()
+    const { results } = await db.prepare(`SELECT COUNT(*) as count FROM ${table.name}`).all()
+    const countResult = results[0]
     tables.push({
       name: table.name,
       rows: (countResult as { count: number } | null)?.count || 0,

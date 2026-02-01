@@ -306,10 +306,10 @@ export default function UTMBuilderClient() {
   }, [finalUrl, params])
 
   const applyPreset = useCallback((preset: UTMPreset) => {
-    setParams((prev) => ({ ...prev, ...preset.params }))
+    setParams({ ...params, ...preset.params })
     setErrors({})
     setTouched({})
-  }, [])
+  }, [params, setParams])
 
   const savePreset = useCallback(() => {
     if (!presetName.trim()) {

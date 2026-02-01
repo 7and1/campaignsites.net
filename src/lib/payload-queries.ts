@@ -4,7 +4,7 @@
  */
 
 import { cache } from 'react'
-import type { Payload } from 'payload'
+import type { Payload, Where } from 'payload'
 
 /**
  * Cache configuration
@@ -22,7 +22,7 @@ const CACHE_TTL = {
 export const getCachedPosts = cache(async (payload: Payload, options?: {
   limit?: number
   page?: number
-  where?: Record<string, unknown>
+  where?: Where
 }) => {
   return await payload.find({
     collection: 'posts',
@@ -67,7 +67,7 @@ export const getCachedPost = cache(async (payload: Payload, slug: string) => {
 export const getCachedCaseStudies = cache(async (payload: Payload, options?: {
   limit?: number
   page?: number
-  where?: Record<string, unknown>
+  where?: Where
 }) => {
   return await payload.find({
     collection: 'case-studies',
@@ -109,7 +109,7 @@ export const getCachedCaseStudy = cache(async (payload: Payload, slug: string) =
  */
 export const getCachedTools = cache(async (payload: Payload, options?: {
   limit?: number
-  where?: Record<string, unknown>
+  where?: Where
 }) => {
   return await payload.find({
     collection: 'tools',

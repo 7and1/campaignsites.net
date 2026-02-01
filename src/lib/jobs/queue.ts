@@ -195,7 +195,8 @@ export const markJobFailed = async (jobId: number, error: string): Promise<void>
   await ensureJobQueueTables(db)
 
   // Check if max attempts reached
-  const job = await db.prepare(`SELECT attempts, max_attempts FROM job_queue WHERE id = ?`).bind(jobId).first()
+  const { results } = await db.prepare(`SELECT attempts, max_attempts FROM job_queue WHERE id = ?`).bind(jobId).all()
+  const job = results[0]
 
   const attempts = (job as { attempts: number } | null)?.attempts || 0
   const maxAttempts = (job as { max_attempts: number } | null)?.max_attempts || 3

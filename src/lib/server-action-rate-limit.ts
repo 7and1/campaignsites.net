@@ -4,7 +4,7 @@
  */
 
 import { headers } from 'next/headers'
-import { checkRateLimit, ensureRateLimitTable } from './rate-limit'
+import { checkRateLimit } from './rate-limit'
 import crypto from 'crypto'
 
 /**
@@ -81,7 +81,6 @@ async function getServerActionIdentifier(): Promise<string> {
 export async function withServerActionRateLimit(
   config: ServerActionRateLimitConfig
 ): Promise<void> {
-  await ensureRateLimitTable()
   const identifier = await getServerActionIdentifier()
 
   const result = await checkRateLimit(identifier, config)

@@ -203,7 +203,7 @@ export const getEmailAnalytics = async (emailId: string): Promise<EmailAnalytics
   const db = await getDatabase()
   await ensureEmailAnalyticsTables(db)
 
-  const result = await db
+  const { results } = await db
     .prepare(
       `SELECT
         SUM(CASE WHEN event_type = 'sent' THEN 1 ELSE 0 END) as sent,
@@ -216,8 +216,9 @@ export const getEmailAnalytics = async (emailId: string): Promise<EmailAnalytics
       WHERE email_id = ?`
     )
     .bind(emailId)
-    .first()
+    .all()
 
+  const result = results[0]
   const row = result as {
     sent: number
     delivered: number

@@ -16,7 +16,7 @@ export interface ApiMiddlewareOptions {
 /**
  * Wrap API handler with monitoring
  */
-export function withMonitoring<T extends (...args: unknown[]) => Promise<Response | NextResponse>>(
+export function withMonitoring<T extends (request: Request, ...args: unknown[]) => Promise<Response | NextResponse>>(
   handler: T,
   options: ApiMiddlewareOptions = {}
 ): T {
@@ -27,8 +27,7 @@ export function withMonitoring<T extends (...args: unknown[]) => Promise<Respons
     excludePaths = [],
   } = options
 
-  return (async (...args: Parameters<T>) => {
-    const request = args[0] as NextRequest | Request
+  return (async (request: Request, ...args: unknown[]) => {
     const startTime = Date.now()
 
     // Extract request details
@@ -38,7 +37,7 @@ export function withMonitoring<T extends (...args: unknown[]) => Promise<Respons
 
     // Skip excluded paths
     if (excludePaths.some(excluded => path.startsWith(excluded))) {
-      return handler(...args)
+      return handler(request, ...args)
     }
 
     // Log request
@@ -53,7 +52,7 @@ export function withMonitoring<T extends (...args: unknown[]) => Promise<Respons
 
     try {
       // Execute handler
-      const response = await handler(...args)
+      const response = await handler(request, ...args)
       const duration = Date.now() - startTime
 
       // Extract status code

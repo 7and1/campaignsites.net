@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { ensureAnalyticsTables, getDatabase, hashIp } from '@/lib/analytics'
 import { upvoteSchema } from '@/lib/zod-schemas'
-import { checkRateLimit, getRateLimitIdentifier, ensureRateLimitTable } from '@/lib/rate-limit'
+import { checkRateLimit, getRateLimitIdentifier } from '@/lib/rate-limit'
 import { logError } from '@/lib/errors'
 import { withMonitoring } from '@/lib/monitoring'
 
@@ -30,10 +30,9 @@ export async function GET(request: Request) {
   }
 }
 
-async function handlePost(request: Request) {
+async function handlePost(request: Request): Promise<NextResponse> {
   try {
     // Rate limiting: 10 upvotes per minute per IP
-    await ensureRateLimitTable()
     const identifier = getRateLimitIdentifier(request)
     const rateLimitResult = await checkRateLimit(identifier, {
       limit: 10,

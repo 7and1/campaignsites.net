@@ -3,7 +3,7 @@
  * Provides KV-based caching for Payload queries with automatic invalidation
  */
 
-import { getPayload } from 'payload'
+import { getPayload, Where } from 'payload'
 import config from '@payload-config'
 import { cachedQuery, CACHE_DURATIONS, CACHE_TAGS, invalidateCacheByTag } from './cache'
 import type { Post, CaseStudy, Tool } from './types'
@@ -14,7 +14,7 @@ import type { Post, CaseStudy, Tool } from './types'
 export async function getCachedPosts(options: {
   limit?: number
   sort?: string
-  where?: Record<string, unknown>
+  where?: Where
 } = {}) {
   const { limit = 10, sort = '-publishedDate', where = {} } = options
   const cacheKey = `${CACHE_TAGS.posts}:list:${JSON.stringify({ limit, sort, where })}`
@@ -64,7 +64,7 @@ export async function getCachedPost(slug: string) {
 export async function getCachedCaseStudies(options: {
   limit?: number
   sort?: string
-  where?: Record<string, unknown>
+  where?: Where
 } = {}) {
   const { limit = 10, sort = '-score', where = {} } = options
   const cacheKey = `${CACHE_TAGS.caseStudies}:list:${JSON.stringify({ limit, sort, where })}`
@@ -114,7 +114,7 @@ export async function getCachedCaseStudy(slug: string) {
 export async function getCachedTools(options: {
   limit?: number
   sort?: string
-  where?: Record<string, unknown>
+  where?: Where
 } = {}) {
   const { limit = 100, sort = 'name', where = {} } = options
   const cacheKey = `${CACHE_TAGS.tools}:list:${JSON.stringify({ limit, sort, where })}`

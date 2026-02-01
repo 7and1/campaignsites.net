@@ -24,7 +24,7 @@ export async function handleEmailQueue(
   batch: MessageBatch<EmailQueueMessage>,
   env: CloudflareEnv
 ): Promise<void> {
-  const resendApiKey = env.RESEND_API_KEY
+  const resendApiKey = process.env.RESEND_API_KEY
 
   if (!resendApiKey) {
     logger.error('RESEND_API_KEY not configured for email queue')
@@ -59,7 +59,7 @@ export async function handleEmailQueue(
         })
         message.ack()
       } else {
-        logger.error('Email send failed from queue', {
+        logger.error('Email send failed from queue', undefined, {
           to: emailJob.to,
           error: result.error,
         })
@@ -67,8 +67,7 @@ export async function handleEmailQueue(
         message.retry()
       }
     } catch (error) {
-      logger.error('Email queue processing error', {
-        error,
+      logger.error('Email queue processing error', error instanceof Error ? error : undefined, {
         messageId: message.id,
       })
       message.retry()

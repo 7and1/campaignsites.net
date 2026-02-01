@@ -46,15 +46,16 @@ async function handleGetPreferences(request: Request) {
     const db = await getDatabase()
     await ensureAnalyticsTables(db)
 
-    const result = await db
+    const { results } = await db
       .prepare(
         `SELECT email, name, status, preferences, created_at
          FROM newsletter_subscribers
          WHERE email = ?`
       )
       .bind(email)
-      .first()
+      .all()
 
+    const result = results[0]
     if (!result) {
       return NextResponse.json({ error: 'Subscriber not found' }, { status: 404 })
     }

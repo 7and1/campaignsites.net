@@ -1,15 +1,14 @@
 import { NextResponse } from 'next/server'
 import { ensureAnalyticsTables, getDatabase } from '@/lib/analytics'
 import { trackSchema } from '@/lib/zod-schemas'
-import { checkRateLimit, getRateLimitIdentifier, ensureRateLimitTable } from '@/lib/rate-limit'
+import { checkRateLimit, getRateLimitIdentifier } from '@/lib/rate-limit'
 import { sanitizeUtm } from '@/lib/sanitization'
 import { withMonitoring } from '@/lib/monitoring'
 import { logError } from '@/lib/errors'
 
-async function handler(request: Request) {
+async function handler(request: Request): Promise<NextResponse> {
   try {
     // Rate limiting: 100 requests per minute per IP for analytics
-    await ensureRateLimitTable()
     const identifier = getRateLimitIdentifier(request)
     const rateLimitResult = await checkRateLimit(identifier, {
       limit: 100,
