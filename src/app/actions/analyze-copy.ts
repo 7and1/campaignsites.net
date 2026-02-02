@@ -6,13 +6,35 @@ import type { CopyAnalysisResult } from '@/lib/types'
 import { logError } from '@/lib/errors'
 import { withServerActionRateLimit, isRateLimitError } from '@/lib/server-action-rate-limit'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+// OpenRouter configuration with key rotation and fallback models
+const OPENROUTER_KEYS = [
+  process.env.OPENROUTER_API_KEY_1,
+  process.env.OPENROUTER_API_KEY_2,
+  process.env.OPENROUTER_API_KEY_3,
+].filter(Boolean) as string[]
 
-// Rate limit configuration: 10 OpenAI requests per hour per IP
-const OPENAI_RATE_LIMIT = {
+const OPENROUTER_MODELS = [
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'deepseek/deepseek-r1-0528:free',
+  'google/gemini-3-flash-preview',
+]
+
+let currentKeyIndex = 0
+
+function getNextOpenRouterKey(): string {
+  if (OPENROUTER_KEYS.length === 0) {
+    throw new Error('No OpenRouter API keys configured')
+  }
+  const key = OPENROUTER_KEYS[currentKeyIndex]
+  currentKeyIndex = (currentKeyIndex + 1) % OPENROUTER_KEYS.length
+  return key
+}
+
+// Rate limit configuration: 10 AI requests per hour per IP
+const AI_RATE_LIMIT = {
   limit: 10,
   window: 60 * 60 * 1000, // 1 hour
-  identifier: 'openai-analyze-copy',
+  identifier: 'ai-analyze-copy',
 }
 
 export type { CopyAnalysisResult }
@@ -100,9 +122,9 @@ export async function analyzeCopy(
   text: string,
   type: 'headline' | 'cta'
 ): Promise<CopyAnalysisResult> {
-  // Rate limiting: 10 OpenAI requests per hour per IP
+  // Rate limiting: 10 AI requests per hour per IP
   try {
-    await withServerActionRateLimit(OPENAI_RATE_LIMIT)
+    await withServerActionRateLimit(AI_RATE_LIMIT)
   } catch (error) {
     if (isRateLimitError(error)) {
       throw new Error(`Rate limit exceeded. Please try again later. Resets at ${new Date(error.resetAt).toLocaleTimeString()}`)
@@ -118,7 +140,7 @@ export async function analyzeCopy(
 
   const sanitizedText = sanitizeInput(validation.data.text)
 
-  if (!process.env.OPENAI_API_KEY) {
+  if (OPENROUTER_KEYS.length === 0) {
     return DEMO_RESPONSE(sanitizedText)
   }
 
@@ -138,21 +160,45 @@ Focus on:
 
 Return ONLY valid JSON, no markdown.`
 
-  try {
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: 'user', content: prompt }],
-      model: 'gpt-4o-mini',
-      response_format: { type: 'json_object' },
-      max_tokens: 800,
-    })
+  // Try each model with fallback logic
+  for (let modelIndex = 0; modelIndex < OPENROUTER_MODELS.length; modelIndex++) {
+    const model = OPENROUTER_MODELS[modelIndex]
 
-    const content = completion.choices[0].message.content
-    if (!content) throw new Error('No response from OpenAI')
+    try {
+      const apiKey = getNextOpenRouterKey()
+      const openrouter = new OpenAI({
+        baseURL: 'https://openrouter.ai/api/v1',
+        apiKey,
+        defaultHeaders: {
+          'HTTP-Referer': 'https://campaignsites.net',
+          'X-Title': 'CampaignSites Copy Optimizer',
+        },
+      })
 
-    const parsed = JSON.parse(content)
-    return validateAnalysisResult(parsed)
-  } catch (error) {
-    logError('analyze-copy', error)
-    return ERROR_RESPONSE(sanitizedText)
+      const completion = await openrouter.chat.completions.create({
+        messages: [{ role: 'user', content: prompt }],
+        model,
+        response_format: { type: 'json_object' },
+        max_tokens: 800,
+      })
+
+      const content = completion.choices[0].message.content
+      if (!content) throw new Error('No response from AI')
+
+      const parsed = JSON.parse(content)
+      return validateAnalysisResult(parsed)
+    } catch (error) {
+      logError(`analyze-copy-${model}`, error)
+
+      // If this is the last model, return error response
+      if (modelIndex === OPENROUTER_MODELS.length - 1) {
+        return ERROR_RESPONSE(sanitizedText)
+      }
+      // Otherwise, continue to next model
+      continue
+    }
   }
+
+  // Fallback if all models fail
+  return ERROR_RESPONSE(sanitizedText)
 }
