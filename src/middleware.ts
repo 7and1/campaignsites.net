@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     form-action 'self';
     frame-ancestors 'none';
     upgrade-insecure-requests;
-    connect-src 'self' https://*.openai.com https://*.cloudflare.com https://api.resend.com;
+    connect-src 'self' https://*.openai.com https://*.cloudflare.com https://api.resend.com https://openrouter.ai;
     worker-src 'self' blob:;
     manifest-src 'self';
   `.replace(/\s+/g, ' ').trim()

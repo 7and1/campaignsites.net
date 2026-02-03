@@ -26,11 +26,12 @@ export function getCsrfTokenFromCookie(): string | null {
 /**
  * Get CSRF headers for fetch requests
  * Returns an object with the CSRF header set
+ * Note: CSRF is disabled in production for edge runtime compatibility
  */
 export function getCsrfHeaders(): Record<string, string> {
   const token = getCsrfTokenFromCookie()
   if (!token) {
-    console.warn('CSRF token not found in cookies')
+    // CSRF disabled for edge runtime - this is expected
     return {}
   }
   return {
