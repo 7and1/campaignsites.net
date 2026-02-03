@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   // Content Security Policy - Production-ready with specific domains
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.cloudflare.com;
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.cloudflare.com https://static.cloudflareinsights.com;
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: https://*.cloudflare.com https://*.cloudinary.com https://*.campaignsites.net;
     font-src 'self' data:;
